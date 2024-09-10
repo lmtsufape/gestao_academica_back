@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y maven
 # Define o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copie todo o código-fonte para o contêiner
+
 COPY . .
 
 # Execute o comando mvn clean install
