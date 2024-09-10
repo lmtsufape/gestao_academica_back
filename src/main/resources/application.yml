@@ -1,0 +1,40 @@
+server:
+  port: 8081
+
+
+spring:
+  application:
+    name: sgi-back
+  web:
+    locale-resolver: fixed
+    locale: pt_BR
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/sgi
+    username: postgres
+    password: 55555
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/sgi
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
