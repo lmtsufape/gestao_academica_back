@@ -13,7 +13,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/sgi
     username: postgres
-    password: 55555
+    password: lmts
 
   jpa:
     properties:
