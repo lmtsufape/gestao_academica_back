@@ -1,6 +1,6 @@
+# src/main/resources/application.yml
 server:
   port: 8081
-
 
 spring:
   application:
@@ -8,21 +8,19 @@ spring:
   web:
     locale-resolver: fixed
     locale: pt_BR
-
+  devtools:
+    livereload:
+      enabled: true
   datasource:
-    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/sgi
     username: postgres
     password: 55555
-
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    hibernate:
-      ddl-auto: update
-    show-sql: true
   security:
     oauth2:
       client:
@@ -36,5 +34,18 @@ spring:
 logging:
   level:
     org:
-      springframework:
-        web: DEBUG
+      springframework: DEBUG
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://backend-db:5432/sgi
+    username: postgres
+    password: password
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/realms/lmts/protocol/openid-connect/certs
