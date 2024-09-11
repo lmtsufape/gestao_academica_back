@@ -1,31 +1,52 @@
 package br.edu.ufape.sgi.comunicacao.controllers;
 
+import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoPatchRequest;
+import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoRequest;
+import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoResponse;
+import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
 import br.edu.ufape.sgi.fachada.Fachada;
 import br.edu.ufape.sgi.models.Aluno;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Controller @RequestMapping("/aluno")  @RequiredArgsConstructor
+@RestController @RequestMapping("/aluno")  @RequiredArgsConstructor
 
 public class AlunoController {
     private final Fachada fachada;
+    private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity salvar(@RequestBody Aluno aluno) {
-        System.out.println(aluno);
-        return new ResponseEntity(fachada.salvar(aluno), HttpStatus.CREATED);
+    public ResponseEntity<AlunoResponse> salvar(@Valid @RequestBody AlunoRequest aluno) {
+       Aluno response = fachada.salvar(aluno.convertToEntity(aluno, modelMapper));
+       return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
-    public String teste(){
-        return "Ai ai";
+    @GetMapping("/{id}") ResponseEntity<AlunoResponse> buscarAluno(@PathVariable Long id) throws AlunoNotFoundException {
+        Aluno response = fachada.buscarAluno(id);
+        return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
     }
+
+    @GetMapping List<AlunoResponse> listarAlunos() {
+        return fachada.listarAlunos().stream().map(aluno -> new AlunoResponse(aluno, modelMapper)).toList();
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<AlunoResponse> atualizarAluno(@PathVariable Long id, @Valid @RequestBody AlunoPatchRequest entity) throws AlunoNotFoundException{
+        Aluno aluno = fachada.buscarAluno(id);
+        modelMapper.map(entity, aluno);
+        return new ResponseEntity<>(new AlunoResponse(fachada.salvar(aluno), modelMapper), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deletarAluno(@PathVariable Long id) throws AlunoNotFoundException {
+        fachada.deletarAluno(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
 }
