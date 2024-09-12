@@ -14,4 +14,9 @@ public class Aluno extends Perfil {
     @Column(unique = true)
     private String matricula;
     private String curso;
+
+    @Override
+    public String getTipo() {
+        return "Aluno";
+    }
 }

@@ -1,12 +1,15 @@
 package br.edu.ufape.sgi.models;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Entity;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
-
+@Entity
 public class Tecnico extends Funcionario {
+    @Override
+    public String getTipo() {
+        return "Tecnico";
+    }
 
 }
