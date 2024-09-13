@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class UsuarioPatchRequest {
+public class UsuarioPatchRequest {
 
     private String nome;
 
