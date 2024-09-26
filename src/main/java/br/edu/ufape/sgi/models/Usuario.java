@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-
-public abstract class Usuario {
+public class Usuario {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String kcId;
@@ -21,4 +22,12 @@ public abstract class Usuario {
     @Column(unique = true)
     private String email;
     private String telefone;
+    private Boolean ativo = true;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Perfil> perfis = new  HashSet<>();
+
+    public void adicionarPerfil(Perfil perfil) {
+        perfis.add(perfil);
+    }
 }

@@ -1,5 +1,8 @@
 package br.edu.ufape.sgi.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class UniqueConstraintViolationException extends RuntimeException {
     private final String field;
 
@@ -8,7 +11,4 @@ public class UniqueConstraintViolationException extends RuntimeException {
         this.field = field;
     }
 
-    public String getField() {
-        return field;
-    }
 }
