@@ -26,11 +26,18 @@ spring:
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8080/realms/sgi
+            issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
             user-name-attribute: preferred_username
       resourceserver:
         jwt:
           jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
+
+keycloak:
+    auth-server-url: http://localhost:8080/
+    realm: sgu-ufape
+    client-secret: KmM3lk7awDU9dr1Bqu25vLMh0ZYqGQ0G
+    client-id: sgu-application
+
 logging:
   level:
     org:
