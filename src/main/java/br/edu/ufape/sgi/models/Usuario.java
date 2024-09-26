@@ -22,12 +22,12 @@ public class Usuario {
     @Column(unique = true)
     private String email;
     private String telefone;
+    private Boolean ativo = true;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Perfil> perfis = new  HashSet<>();
 
     public void adicionarPerfil(Perfil perfil) {
-        perfil.setUsuario(this);
         perfis.add(perfil);
     }
 }
