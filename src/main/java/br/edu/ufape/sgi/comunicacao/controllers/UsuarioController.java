@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,30 +30,33 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioResponse> salvar(@Valid @RequestBody UsuarioRequest usuario) {
-        Usuario response = fachada.salvar(usuario.convertToEntity(usuario, modelMapper));
+        Usuario response = fachada.salvarUsuario(usuario.convertToEntity(usuario, modelMapper), usuario.getSenha());
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}") ResponseEntity<UsuarioResponse> buscarVisitante(@PathVariable Long id) throws UsuarioNotFoundException {
+    @GetMapping("/{id}") ResponseEntity<UsuarioResponse> buscar(@PathVariable Long id) throws UsuarioNotFoundException {
         Usuario response = fachada.buscarUsuario(id);
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
     @GetMapping
-    List<UsuarioResponse> listarUsuarios() {
+    List<UsuarioResponse> listar() {
         return fachada.listarUsuarios().stream().map(usuario -> new UsuarioResponse(usuario, modelMapper)).toList();
     }
 
-    @PatchMapping("/{id}")
-    ResponseEntity<UsuarioResponse> atualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioPatchRequest entity) throws UsuarioNotFoundException{
-        Usuario usuario = fachada.buscarUsuario(id);
-        modelMapper.map(entity, usuario);
-        return new ResponseEntity<>(new UsuarioResponse(fachada.salvar(usuario), modelMapper), HttpStatus.OK);
+    @PatchMapping("/editar")
+    ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Usuario novoUsuario = usuario.convertToEntity(usuario, modelMapper);
+        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(jwt.getSubject(), novoUsuario), modelMapper), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<Void> deletarUsuario(@PathVariable Long id) throws UsuarioNotFoundException {
-        fachada.deletarUsuario(id);
+    @DeleteMapping("/deletar")
+    ResponseEntity<Void> deletar() throws UsuarioNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        fachada.deletarUsuario(jwt.getSubject());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

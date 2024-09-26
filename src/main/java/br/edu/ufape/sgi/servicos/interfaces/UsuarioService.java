@@ -8,9 +8,11 @@ import java.util.List;
 public interface UsuarioService {
     Usuario salvar(Usuario usuario);
 
+    Usuario editarUsuario(String idSessao, Usuario novoUsuario) throws UsuarioNotFoundException;
+
     Usuario buscarUsuario(Long id) throws UsuarioNotFoundException;
 
     List<Usuario> listarUsuarios();
 
-    void deletarUsuario(Long id) throws UsuarioNotFoundException;
+    void deletarUsuario(String sessionId) throws UsuarioNotFoundException;
 }
