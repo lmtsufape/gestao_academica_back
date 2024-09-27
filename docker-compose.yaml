@@ -1,16 +1,16 @@
 version: '3.9'
 services:
   backend:
-    image: sgi-backend
+    image: sgu-backend
     build: .
     ports:
       - "8081:8081"
     command: mvn spring-boot:run
     networks:
-      - sgi-networks
+      - sgu-networks
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://backend-db:5432/sgi
+      SPRING_DATASOURCE_URL: jdbc:postgresql://backend-db:5432/sgu
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
     depends_on:
@@ -21,7 +21,7 @@ services:
     image: postgres:16.0
     restart: always
     environment:
-      POSTGRES_DB: sgi
+      POSTGRES_DB: sgu
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       TZ: America/Sao_Paulo
@@ -30,7 +30,7 @@ services:
     expose:
       - "5432"
     networks:
-      - sgi-networks
+      - sgu-networks
     volumes:
       - pg-data:/var/lib/postgresql/data
   keycloak:
@@ -38,7 +38,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-        - sgi-networks
+        - sgu-networks
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -66,7 +66,7 @@ services:
     expose:
       - "5432"
     networks:
-        - sgi-networks
+        - sgu-networks
     volumes:
       - keycloak-pg-data:/var/lib/postgresql/data
 
@@ -77,5 +77,5 @@ volumes:
     driver: local
 
 networks:
-    sgi-networks:
+    sgu-networks:
         driver: bridge
