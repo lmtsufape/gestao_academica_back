@@ -1,7 +1,7 @@
 package br.edu.ufape.sgi.servicos;
 
 import br.edu.ufape.sgi.dados.UsuarioRepository;
-import br.edu.ufape.sgi.exceptions.ExceptionUtil;
+
 
 import br.edu.ufape.sgi.exceptions.usuario.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.Usuario;
@@ -9,7 +9,6 @@ import br.edu.ufape.sgi.models.Usuario;
 import br.edu.ufape.sgi.models.Visitante;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,14 +20,9 @@ public class UsuarioService implements br.edu.ufape.sgi.servicos.interfaces.Usua
 
     @Override
     public Usuario salvar(Usuario usuario) {
-        try {
-            Visitante visitante = new Visitante();
-            usuario.adicionarPerfil(visitante);
-            return usuarioRepository.save(usuario);
-        }catch (DataIntegrityViolationException e){
-            ExceptionUtil.handleDataIntegrityViolationException(e);
-            return null;
-        }
+        Visitante visitante = new Visitante();
+        usuario.adicionarPerfil(visitante);
+        return usuarioRepository.save(usuario);
     }
     @Override
     public Usuario editarUsuario(String idSessao, Usuario novoUsuario) throws UsuarioNotFoundException {
