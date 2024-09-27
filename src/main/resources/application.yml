@@ -55,7 +55,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://keycloak:8080/realms/lmts/protocol/openid-connect/certs
+          jwk-set-uri: ${keycloak.auth-server-url}realms/${keycloak.realm}/protocol/openid-connect/certs
 keycloak:
   auth-server-url: http://keycloak:8080/
   realm: sgu-ufape
