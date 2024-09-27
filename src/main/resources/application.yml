@@ -4,7 +4,7 @@ server:
 
 spring:
   application:
-    name: sgi-back
+    name: sgu-back
   web:
     locale-resolver: fixed
     locale: pt_BR
@@ -12,7 +12,7 @@ spring:
     livereload:
       enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/sgi
+    url: jdbc:postgresql://localhost:5432/sgu
     username: postgres
     password: 55555
   jpa:
@@ -35,7 +35,7 @@ spring:
 keycloak:
     auth-server-url: http://localhost:8080/
     realm: sgu-ufape
-    client-secret: KmM3lk7awDU9dr1Bqu25vLMh0ZYqGQ0G
+    client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
     client-id: sgu-application
 
 logging:
@@ -48,11 +48,16 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: jdbc:postgresql://backend-db:5432/sgi
+    url: jdbc:postgresql://backend-db:5432/sgu
     username: postgres
     password: password
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://keycloak:8080/realms/lmts/protocol/openid-connect/certs
+          jwk-set-uri: ${keycloak.auth-server-url}realms/${keycloak.realm}/protocol/openid-connect/certs
+keycloak:
+  auth-server-url: http://keycloak:8080/
+  realm: sgu-ufape
+  client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
+  client-id: sgu-application

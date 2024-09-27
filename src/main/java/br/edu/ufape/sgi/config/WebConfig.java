@@ -23,10 +23,12 @@ public class WebConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless session management
                 )
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/usuario/registrar").permitAll()
                         .requestMatchers("/security/**").permitAll()
                         .requestMatchers("/api-doc/**").permitAll()
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().permitAll() //Modificar para authenticated() futuramente, quando for implementar o security de fato
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("auth/**").permitAll()
+                        .anyRequest().authenticated()
                 ).oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeycloakJwtAuthenticationConverter())));
         return http.build();
     }

@@ -2,6 +2,7 @@ package br.edu.ufape.sgi.fachada;
 
 
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
+import br.edu.ufape.sgi.exceptions.ExceptionUtil;
 import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
 import br.edu.ufape.sgi.exceptions.usuario.UsuarioNotFoundException;
@@ -11,7 +12,6 @@ import br.edu.ufape.sgi.servicos.KeycloakService;
 import br.edu.ufape.sgi.servicos.interfaces.AlunoService;
 import br.edu.ufape.sgi.servicos.interfaces.UsuarioService;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
@@ -30,10 +30,12 @@ public class Fachada {
         return keycloakService.login(username, password);
     }
 
-    // ================== Aluno ================== //
-    public Aluno salvarUsuario(Aluno aluno) {
-        return alunoService.salvar(aluno);
+    public TokenResponse refresh(String refreshToken) {
+        return keycloakService.refreshToken(refreshToken);
     }
+
+    // ================== Aluno ================== //
+
 
     public Aluno buscarAluno(Long id) throws AlunoNotFoundException { return alunoService.buscarAluno(id);
     }
@@ -45,29 +47,19 @@ public class Fachada {
     @Transactional
     public Usuario salvarUsuario(Usuario usuario, String senha) {
         String userKcId = null;
-        try {
-            Response keycloakResponse = keycloakService.createUser(usuario.getEmail(), senha, "visitante");
-            if (keycloakResponse.getStatus() == 201) {
+            keycloakService.createUser(usuario.getEmail(), senha, "visitante");
+            try {
                 userKcId = keycloakService.getUserId(usuario.getEmail());
                 usuario.setKcId(userKcId);
                 return usuarioService.salvar(usuario);
-
-            } else {
-                throw new RuntimeException("Falha ao criar o usuário no Keycloak. Status: " + keycloakResponse.getStatus());
-            }
-        } catch (KeycloakAuthenticationException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (DataIntegrityViolationException e) {
-            if (userKcId != null) {
+            }catch (DataIntegrityViolationException e){
                 keycloakService.deleteUser(userKcId);
-            }
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (Exception e) {
-            if (userKcId != null) {
+                ExceptionUtil.handleDataIntegrityViolationException(e);
+                throw e;
+            }catch (Exception e){
                 keycloakService.deleteUser(userKcId);
+                throw new RuntimeException("Ocorreu um erro inesperado ao salvar o usuário: "+ e.getMessage(), e);
             }
-            throw new RuntimeException("Erro inesperado ao salvarUsuario usuário: " + e.getMessage(), e);
-        }
     }
 
     public Usuario editarUsuario(String idSessao, Usuario novoUsuario) throws UsuarioNotFoundException {

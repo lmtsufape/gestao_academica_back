@@ -28,7 +28,7 @@ public class UsuarioController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<UsuarioResponse> salvar(@Valid @RequestBody UsuarioRequest usuario) {
         Usuario response = fachada.salvarUsuario(usuario.convertToEntity(usuario, modelMapper), usuario.getSenha());
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.CREATED);
@@ -47,16 +47,16 @@ public class UsuarioController {
     @PatchMapping("/editar")
     ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Jwt principal = (Jwt) authentication.getPrincipal();
         Usuario novoUsuario = usuario.convertToEntity(usuario, modelMapper);
-        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(jwt.getSubject(), novoUsuario), modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(principal.getSubject(), novoUsuario), modelMapper), HttpStatus.OK);
     }
 
     @DeleteMapping("/deletar")
     ResponseEntity<Void> deletar() throws UsuarioNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-        fachada.deletarUsuario(jwt.getSubject());
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        fachada.deletarUsuario(principal.getSubject());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

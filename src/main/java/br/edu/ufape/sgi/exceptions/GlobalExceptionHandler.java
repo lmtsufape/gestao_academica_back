@@ -22,7 +22,7 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UniqueConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> handleUniqueConstraintViolation(UniqueConstraintViolationException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("field", ex.getField());
