@@ -30,6 +30,10 @@ public class Fachada {
         return keycloakService.login(username, password);
     }
 
+    public TokenResponse refresh(String refreshToken) {
+        return keycloakService.refreshToken(refreshToken);
+    }
+
     // ================== Aluno ================== //
     public Aluno salvarUsuario(Aluno aluno) {
         return alunoService.salvar(aluno);

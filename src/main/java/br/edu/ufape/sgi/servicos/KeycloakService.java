@@ -51,7 +51,7 @@ public class KeycloakService {
                 .realm("master") // Realm do admin
                 .clientId("admin-cli")
                 .username("admin") // Credenciais do administrador
-                .password("admin") // Substitua pela senha do admin
+                .password("admin")
                 .build();
     }
 
@@ -103,6 +103,32 @@ public class KeycloakService {
             throw new KeycloakAuthenticationException("Erro inesperado durante o login.", e);
         }
     }
+
+    public TokenResponse refreshToken(String refreshToken) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "refresh_token");
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("refresh_token", refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+        String keycloakTokenUrl = keycloakServerUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+
+        ResponseEntity<TokenResponse> response = restTemplate.postForEntity(keycloakTokenUrl, request, TokenResponse.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody(); // Retorna o novo access_token e refresh_token
+        } else {
+            throw new RuntimeException("Failed to refresh token");
+        }
+    }
+
 
     public Response createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
         try {

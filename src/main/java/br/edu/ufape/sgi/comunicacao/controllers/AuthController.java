@@ -21,5 +21,11 @@ public class AuthController {
         TokenResponse response = fachada.login(username, password);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@RequestParam("refresh_token") String refreshToken) {
+        TokenResponse response = fachada.refresh(refreshToken);
+        return ResponseEntity.ok(response);
+    }
 }
 
