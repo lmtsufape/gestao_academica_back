@@ -32,6 +32,12 @@ spring:
         jwt:
           jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
 
+springdoc:
+  api-docs:
+    path: /api-doc/docs
+  swagger-ui:
+    path: /api-doc/swagger.html
+
 keycloak:
     auth-server-url: http://localhost:8080/
     realm: sgu-ufape
