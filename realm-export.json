@@ -850,7 +850,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5",
       "redirectUris": [
         "/*"
       ],
@@ -940,47 +940,7 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:sgu-application:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:sgu-application:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
+      ]
     }
   ],
   "clientScopes": [

@@ -33,6 +33,7 @@ services:
       - sgu-networks
     volumes:
       - pg-data:/var/lib/postgresql/data
+
   keycloak:
     image: quay.io/keycloak/keycloak
     ports:
@@ -49,9 +50,13 @@ services:
       DB_USER: postgres
       DB_SCHEMA: public
       DB_PASSWORD: password
-    command: start-dev
+    command:
+      - "start-dev"
+      - "--import-realm"
     depends_on:
       - keycloak-db
+    volumes:
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
 
   keycloak-db:
     image: postgres:16.0
