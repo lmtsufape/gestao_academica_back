@@ -130,7 +130,7 @@ public class KeycloakService {
     }
 
 
-    public Response createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
+    public void createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
         try {
             // Configurar as credenciais do usuário
             UserRepresentation user = getUserRepresentation(email, password);
@@ -150,8 +150,6 @@ public class KeycloakService {
             String userId = keycloak.realm(realm).users().search(email).getFirst().getId();
             RoleRepresentation userRole = keycloak.realm(realm).roles().get(role).toRepresentation();
             keycloak.realm(realm).users().get(userId).roles().realmLevel().add(Collections.singletonList(userRole));
-
-            return response;
 
         } catch (NotFoundException e) {
             throw new KeycloakAuthenticationException("Role " + role + " não encontrado no Keycloak.", e);
