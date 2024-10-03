@@ -36,6 +36,7 @@ public class WebConfig {
                         .requestMatchers("/api-doc/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/auth/refresh").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeycloakJwtAuthenticationConverter())))
                 .cors(Customizer.withDefaults());
