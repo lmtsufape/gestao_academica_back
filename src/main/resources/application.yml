@@ -44,6 +44,9 @@ keycloak:
     client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
     client-id: sgu-application
 
+common:
+  front: http://localhost:3000/
+
 logging:
   level:
     org:
