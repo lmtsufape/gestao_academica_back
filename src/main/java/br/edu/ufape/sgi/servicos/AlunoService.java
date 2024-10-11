@@ -2,7 +2,7 @@ package br.edu.ufape.sgi.servicos;
 
 import br.edu.ufape.sgi.dados.AlunoRepository;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sgi.models.Aluno;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;

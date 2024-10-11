@@ -2,14 +2,18 @@ package br.edu.ufape.sgi.fachada;
 
 
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
+import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
-import br.edu.ufape.sgi.exceptions.usuario.UsuarioNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.Aluno;
+import br.edu.ufape.sgi.models.Curso;
 import br.edu.ufape.sgi.models.Usuario;
-import br.edu.ufape.sgi.servicos.KeycloakService;
 import br.edu.ufape.sgi.servicos.interfaces.AlunoService;
+import br.edu.ufape.sgi.servicos.interfaces.CursoService;
+import br.edu.ufape.sgi.servicos.interfaces.KeycloakServiceInterface;
 import br.edu.ufape.sgi.servicos.interfaces.UsuarioService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +27,8 @@ import java.util.List;
 public class Fachada {
     private final AlunoService alunoService;
     private final UsuarioService usuarioService;
-    private final KeycloakService keycloakService;
+    private final KeycloakServiceInterface keycloakService;
+    private final CursoService cursoService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -78,4 +83,25 @@ public class Fachada {
             throw new RuntimeException(e.getMessage(), e);
         }
         usuarioService.deletarUsuario(idSessao);}
+
+    // ================== Curso ================== //
+    public Curso salvarCurso(Curso curso) throws CursoDuplicadoException {
+        return cursoService.salvar(curso);
+    }
+
+    public Curso buscarCurso(Long id) throws CursoNotFoundException {
+        return cursoService.buscar(id);
+    }
+
+    public List<Curso> listarCursos() {
+        return cursoService.listar();
+    }
+
+    public Curso editarCurso(Long id, Curso novoCurso) throws CursoNotFoundException, CursoDuplicadoException {
+        return cursoService.editar(id, novoCurso);
+    }
+
+    public void deletarCurso(Long id) throws CursoNotFoundException {
+        cursoService.deletar(id);
+    }
 }
