@@ -4,13 +4,13 @@ package br.edu.ufape.sgi.servicos;
 
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
+import br.edu.ufape.sgi.servicos.interfaces.KeycloakServiceInterface;
 import jakarta.annotation.PostConstruct;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service @RequiredArgsConstructor
-public class KeycloakService {
+public class KeycloakService implements KeycloakServiceInterface {
     private Keycloak keycloak;
 
     @Value("${keycloak.realm}")
@@ -42,6 +42,7 @@ public class KeycloakService {
     private String clientId;
 
 
+    @Override
     @PostConstruct
     public void init() {
         System.out.println(keycloakServerUrl);
@@ -55,6 +56,7 @@ public class KeycloakService {
                 .build();
     }
 
+    @Override
     public TokenResponse login(String email, String password) throws KeycloakAuthenticationException {
         String tokenUrl = keycloakServerUrl + "/realms/" + realm + "/protocol/openid-connect/token";
 
@@ -104,6 +106,7 @@ public class KeycloakService {
         }
     }
 
+    @Override
     public TokenResponse refreshToken(String refreshToken) {
         RestTemplate restTemplate = new RestTemplate();
 
@@ -130,10 +133,11 @@ public class KeycloakService {
     }
 
 
+    @Override
     public void createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
         try {
             // Configurar as credenciais do usuário
-            UserRepresentation user = getUserRepresentation(email, password);
+            UserRepresentation user = KeycloakServiceInterface.getUserRepresentation(email, password);
 
             // Criar o usuário no Keycloak
             Response response = keycloak.realm(realm).users().create(user);
@@ -163,30 +167,14 @@ public class KeycloakService {
         }
     }
 
-    private static UserRepresentation getUserRepresentation(String email, String password) {
-        CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setTemporary(false);
-        credential.setType(CredentialRepresentation.PASSWORD);
-        credential.setValue(password);
-
-        // Configurar o novo usuário
-        UserRepresentation user = new UserRepresentation();
-        user.setUsername(email);
-        user.setFirstName(email);
-        user.setLastName(email);
-        user.setEmail(email);
-        user.setEnabled(true);
-        user.setEmailVerified(true);
-        user.setCredentials(Collections.singletonList(credential));
-        return user;
-    }
-
+    @Override
     public void deleteUser(String userId) {
         keycloak.realm(realm).users().get(userId).remove();
     }
 
 
 
+    @Override
     public String getUserId(String username) {
         List<UserRepresentation> user = keycloak.realm(realm).users().search(username, true);
         if (!user.isEmpty()) {
