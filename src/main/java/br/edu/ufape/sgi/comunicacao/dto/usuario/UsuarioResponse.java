@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 public class UsuarioResponse {
     Long id;
     String nome;
+    String nomeSocial;
     String cpf;
     String email;
     String telefone;

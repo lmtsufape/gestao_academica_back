@@ -17,6 +17,7 @@ public class Usuario {
     private Long id;
     private String kcId;
     private String nome;
+    private String nomeSocial;
     @Column(unique = true)
     private String cpf;
     @Column(unique = true)
@@ -25,6 +26,7 @@ public class Usuario {
     private Boolean ativo = true;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
     private Set<Perfil> perfis = new  HashSet<>();
 
     public void adicionarPerfil(Perfil perfil) {

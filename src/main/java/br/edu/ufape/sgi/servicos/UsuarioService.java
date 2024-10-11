@@ -3,7 +3,7 @@ package br.edu.ufape.sgi.servicos;
 import br.edu.ufape.sgi.dados.UsuarioRepository;
 
 
-import br.edu.ufape.sgi.exceptions.usuario.UsuarioNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.Usuario;
 
 import br.edu.ufape.sgi.models.Visitante;

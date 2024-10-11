@@ -6,7 +6,7 @@ package br.edu.ufape.sgi.comunicacao.controllers;
 import br.edu.ufape.sgi.comunicacao.dto.usuario.UsuarioPatchRequest;
 import br.edu.ufape.sgi.comunicacao.dto.usuario.UsuarioRequest;
 import br.edu.ufape.sgi.comunicacao.dto.usuario.UsuarioResponse;
-import br.edu.ufape.sgi.exceptions.usuario.UsuarioNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.fachada.Fachada;
 
 import br.edu.ufape.sgi.models.Usuario;
@@ -34,18 +34,19 @@ public class UsuarioController {
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}") ResponseEntity<UsuarioResponse> buscar(@PathVariable Long id) throws UsuarioNotFoundException {
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioResponse> buscar(@PathVariable Long id) throws UsuarioNotFoundException {
         Usuario response = fachada.buscarUsuario(id);
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
     @GetMapping
-    List<UsuarioResponse> listar() {
+    public List<UsuarioResponse> listar() {
         return fachada.listarUsuarios().stream().map(usuario -> new UsuarioResponse(usuario, modelMapper)).toList();
     }
 
     @PatchMapping("/editar")
-    ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
+    public ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
         Usuario novoUsuario = usuario.convertToEntity(usuario, modelMapper);
@@ -53,7 +54,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/deletar")
-    ResponseEntity<Void> deletar() throws UsuarioNotFoundException {
+    public ResponseEntity<Void> deletar() throws UsuarioNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
         fachada.deletarUsuario(principal.getSubject());
