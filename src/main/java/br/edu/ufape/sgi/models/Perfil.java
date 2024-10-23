@@ -1,5 +1,6 @@
 package br.edu.ufape.sgi.models;
 
+import br.edu.ufape.sgi.models.Enums.TipoPerfil;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ public abstract class Perfil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public abstract String getTipo();
+    public abstract TipoPerfil getTipo();
 
 
 }

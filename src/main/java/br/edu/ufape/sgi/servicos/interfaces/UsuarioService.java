@@ -12,6 +12,8 @@ public interface UsuarioService {
 
     Usuario buscarUsuario(Long id) throws UsuarioNotFoundException;
 
+    Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException;
+
     List<Usuario> listarUsuarios();
 
     void deletarUsuario(String sessionId) throws UsuarioNotFoundException;

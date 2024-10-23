@@ -37,6 +37,11 @@ public class UsuarioService implements br.edu.ufape.sgi.servicos.interfaces.Usua
     }
 
     @Override
+    public Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException {
+        return usuarioRepository.findByKcId(kcId).orElseThrow(UsuarioNotFoundException::new);
+    }
+
+    @Override
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findByAtivoTrue();
     }
