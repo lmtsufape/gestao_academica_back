@@ -45,6 +45,14 @@ public class UsuarioController {
         return fachada.listarUsuarios().stream().map(usuario -> new UsuarioResponse(usuario, modelMapper)).toList();
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<UsuarioResponse> buscarUsuarioAtual() throws UsuarioNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        Usuario response = fachada.buscarUsuarioPorKcId(principal.getSubject());
+        return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
+    }
+
     @PatchMapping("/editar")
     public ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
