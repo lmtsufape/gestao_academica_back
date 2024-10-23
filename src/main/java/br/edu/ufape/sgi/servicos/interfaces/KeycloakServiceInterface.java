@@ -34,7 +34,11 @@ public interface KeycloakServiceInterface {
 
     TokenResponse refreshToken(String refreshToken);
 
+    void logout(String accessToken, String refreshToken);
+
     void createUser(String email, String password, String role) throws KeycloakAuthenticationException;
+
+    void addRoleToUser(String userId, String role);
 
     void deleteUser(String userId);
 

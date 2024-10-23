@@ -39,6 +39,10 @@ public class Fachada {
         return keycloakService.refreshToken(refreshToken);
     }
 
+    public void logout(String accessToken, String refreshToken) {
+        keycloakService.logout(accessToken, refreshToken);
+    }
+
     // ================== Aluno ================== //
 
 
@@ -71,6 +75,7 @@ public class Fachada {
         return usuarioService.editarUsuario(idSessao, novoUsuario);
     }
 
+    public Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException {return usuarioService.buscarUsuarioPorKcId(kcId);}
 
     public Usuario buscarUsuario(Long id) throws UsuarioNotFoundException {return usuarioService.buscarUsuario(id);}
 

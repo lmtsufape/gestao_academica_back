@@ -1,5 +1,6 @@
 package br.edu.ufape.sgi.models;
 
+import br.edu.ufape.sgi.models.Enums.TipoPerfil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,8 @@ public class Professor extends Funcionario {
     private Set<Curso> cursos = new HashSet<>();
 
     @Override
-    public String getTipo() {
-        return "Professor";
+    public TipoPerfil getTipo() {
+        return TipoPerfil.PROFESSOR;
     }
 
 

@@ -42,6 +42,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     private String clientId;
 
 
+
     @Override
     @PostConstruct
     public void init() {
@@ -132,6 +133,27 @@ public class KeycloakService implements KeycloakServiceInterface {
         }
     }
 
+    @Override
+    public void logout(String accessToken, String refreshToken) {
+        String logoutUrl = keycloakServerUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("Authorization", "Bearer " + accessToken);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("refresh_token", refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = restTemplate.exchange(logoutUrl, HttpMethod.POST, request, String.class);
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new KeycloakAuthenticationException("Um erro ao fazer logout no Keycloak. Status: " + response.getStatusCode());
+        }
+    }
 
     @Override
     public void createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
@@ -164,6 +186,18 @@ public class KeycloakService implements KeycloakServiceInterface {
         } catch (Exception e) {
             // Captura de qualquer outro erro inesperado
             throw new KeycloakAuthenticationException("Erro inesperado ao criar o usuário no Keycloak.", e);
+        }
+    }
+
+    @Override
+    public void addRoleToUser(String userId, String role) {
+        try {
+            RoleRepresentation userRole = keycloak.realm(realm).roles().get(role).toRepresentation();
+            keycloak.realm(realm).users().get(userId).roles().realmLevel().add(Collections.singletonList(userRole));
+        } catch (NotFoundException e) {
+            throw new KeycloakAuthenticationException("Role " + role + " não encontrado no Keycloak.", e);
+        }catch (Exception e) {
+            throw new KeycloakAuthenticationException("Erro inesperado ao adicionar papel ao usuário." + e.getMessage(), e);
         }
     }
 
