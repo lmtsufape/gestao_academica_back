@@ -3,6 +3,7 @@ package br.edu.ufape.sgi.servicos;
 import br.edu.ufape.sgi.dados.UsuarioRepository;
 
 
+import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.Usuario;
 
@@ -32,8 +33,12 @@ public class UsuarioService implements br.edu.ufape.sgi.servicos.interfaces.Usua
     }
 
     @Override
-    public Usuario buscarUsuario(Long id) throws UsuarioNotFoundException {
-        return usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
+    public Usuario buscarUsuario(Long id, boolean isAdm, String sessionId) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
+        if(!isAdm && !usuario.getKcId().equals(sessionId)) {
+            throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
+        }
+        return usuario;
     }
 
     @Override
