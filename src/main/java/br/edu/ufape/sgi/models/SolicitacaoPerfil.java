@@ -1,5 +1,8 @@
 package br.edu.ufape.sgi.models;
 
+
+import br.edu.ufape.sgi.models.Enums.StatusSolicitacao;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,34 +10,39 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.HashSet;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class Usuario {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+public class SolicitacaoPerfil {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String kcId;
-    private String nome;
-    private String nomeSocial;
-    @Column(unique = true)
-    private String cpf;
-    @Column(unique = true)
-    private String email;
-    private String telefone;
-    private Boolean ativo = true;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id")
-    private Set<Perfil> perfis = new  HashSet<>();
+    private LocalDateTime dataSolicitacao;
 
-    public void adicionarPerfil(Perfil perfil) {
-        perfis.add(perfil);
-    }
+    private StatusSolicitacao status;
+
+    private LocalDateTime dataAvaliacao;
+
+    private String parecer;
+
+    @OneToOne
+    @JoinColumn(name = "perfil_id")
+    private Perfil perfil;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Documento> documentos = new ArrayList<>();
+
+    @ManyToOne
+    private Usuario solicitante;
+
+    @ManyToOne
+    private Usuario responsavel;
 
     @Override
     public final boolean equals(Object o) {
@@ -50,8 +58,8 @@ public class Usuario {
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass)
             return false;
-        Usuario usuario = (Usuario) o;
-        return getId() != null && Objects.equals(getId(), usuario.getId());
+        SolicitacaoPerfil solicitacaoPerfil = (SolicitacaoPerfil) o;
+        return getId() != null && Objects.equals(getId(), solicitacaoPerfil.getId());
     }
 
     @Override
@@ -60,8 +68,4 @@ public class Usuario {
                 ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
                 : getClass().hashCode();
     }
-
-//    public Optional<Aluno> getAluno() {
-//        return perfis.stream().filter(perfil -> perfil instanceof Aluno).map(perfil -> (Aluno) perfil).findFirst();
-//    }
 }

@@ -2,7 +2,7 @@ package br.edu.ufape.sgi.comunicacao.controllers;
 
 
 import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoResponse;
-import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sgi.fachada.Fachada;
 import br.edu.ufape.sgi.models.Aluno;
 import lombok.RequiredArgsConstructor;

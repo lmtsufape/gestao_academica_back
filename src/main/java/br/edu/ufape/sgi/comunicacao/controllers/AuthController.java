@@ -5,10 +5,7 @@ import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
 import br.edu.ufape.sgi.fachada.Fachada;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,6 +23,13 @@ public class AuthController {
     public ResponseEntity<TokenResponse> refresh(@RequestParam("refresh_token") String refreshToken) {
         TokenResponse response = fachada.refresh(refreshToken);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token, @RequestParam("refresh_token") String refreshToken) {
+        String accessToken = token.replace("Bearer ", "");
+        fachada.logout(accessToken, refreshToken);
+        return ResponseEntity.noContent().build();
     }
 }
 

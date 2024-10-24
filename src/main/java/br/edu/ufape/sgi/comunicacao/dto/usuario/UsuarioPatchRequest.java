@@ -16,6 +16,8 @@ public class UsuarioPatchRequest {
 
     private String nome;
 
+    private String nomeSocial;
+
     @NumeroValido
     private String telefone;
 

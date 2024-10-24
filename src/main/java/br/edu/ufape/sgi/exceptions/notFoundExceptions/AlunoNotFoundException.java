@@ -1,4 +1,4 @@
-package br.edu.ufape.sgi.exceptions.aluno;
+package br.edu.ufape.sgi.exceptions.notFoundExceptions;
 
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.ResponseStatus;

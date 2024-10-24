@@ -11,6 +11,10 @@ spring:
   devtools:
     livereload:
       enabled: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 20MB
   datasource:
     url: jdbc:postgresql://localhost:5432/sgu
     username: postgres

@@ -19,6 +19,8 @@ public class UsuarioRequest {
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
+    private String nomeSocial;
+
     @CPF
     private String cpf;
 

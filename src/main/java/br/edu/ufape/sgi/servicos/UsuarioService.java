@@ -3,7 +3,7 @@ package br.edu.ufape.sgi.servicos;
 import br.edu.ufape.sgi.dados.UsuarioRepository;
 
 
-import br.edu.ufape.sgi.exceptions.usuario.UsuarioNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.Usuario;
 
 import br.edu.ufape.sgi.models.Visitante;
@@ -34,6 +34,11 @@ public class UsuarioService implements br.edu.ufape.sgi.servicos.interfaces.Usua
     @Override
     public Usuario buscarUsuario(Long id) throws UsuarioNotFoundException {
         return usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException {
+        return usuarioRepository.findByKcId(kcId).orElseThrow(UsuarioNotFoundException::new);
     }
 
     @Override
