@@ -1,6 +1,8 @@
 # src/main/resources/application.yml
 server:
   port: 8081
+  error:
+    include-stacktrace: never
 
 spring:
   application:
@@ -35,7 +37,6 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
-
 springdoc:
   api-docs:
     path: /api-doc/docs

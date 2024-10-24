@@ -4,13 +4,10 @@ package br.edu.ufape.sgi.fachada;
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
 import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.SolicitacaoAccessDeniedException;
+import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.*;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.*;
 import br.edu.ufape.sgi.servicos.interfaces.*;
 import jakarta.transaction.Transactional;
@@ -32,6 +29,8 @@ public class Fachada {
     private final SolicitacaoPerfilService solicitacaoPerfilService;
     private final ArmazenamentoService armazenamentoService;
     private final PerfilService perfilService;
+    private final ProfessorService professorService;
+    private final TecnicoService tecnicoService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -49,11 +48,38 @@ public class Fachada {
     // ================== Aluno ================== //
 
 
-    public Aluno buscarAluno(Long id) throws AlunoNotFoundException { return alunoService.buscarAluno(id);
+    public List<Usuario> listarAlunos() {
+        return alunoService.listarAlunos();
     }
-    public List<Aluno> listarAlunos() {return alunoService.listarAlunos();}
 
-    public void deletarAluno(Long id) throws AlunoNotFoundException {alunoService.deletarAluno(id);}
+    public Usuario buscarAluno(Long id, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return alunoService.buscarAluno(id, isAdmin, sessionId);
+    }
+
+
+    // ================== Professor ================== //
+    public List<Usuario> listarProfessores() {
+        return professorService.listarProfessores();
+    }
+
+    public Usuario buscarProfessor(Long id, String sessionId) throws UsuarioNotFoundException, ProfessorNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return professorService.buscarProfessor(id, isAdmin, sessionId);
+    }
+
+
+    // ================== Tecnico ================== //
+
+    public List<Usuario> listarTecnicos(){
+        return tecnicoService.getTecnicos();
+    }
+
+    public Usuario buscarTecnico(Long id, String sessionId) throws UsuarioNotFoundException, TecnicoNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return tecnicoService.buscarTecnico(id, isAdmin, sessionId);
+    }
+
 
     // ================== Usuario ================== //
     @Transactional
@@ -80,7 +106,9 @@ public class Fachada {
 
     public Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException {return usuarioService.buscarUsuarioPorKcId(kcId);}
 
-    public Usuario buscarUsuario(Long id) throws UsuarioNotFoundException {return usuarioService.buscarUsuario(id);}
+    public Usuario buscarUsuario(Long id, String sessionId) throws UsuarioNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return usuarioService.buscarUsuario(id, isAdmin, sessionId);}
 
     public List<Usuario> listarUsuarios() {return usuarioService.listarUsuarios();}
 
@@ -116,18 +144,16 @@ public class Fachada {
     // ================== SolicitacaoPerfil ================== //
     @Transactional
     public SolicitacaoPerfil solicitarPerfil(Perfil perfil, String sessionId, MultipartFile[] arquivos) throws UsuarioNotFoundException, SolicitacaoDuplicadaException {
-        SolicitacaoPerfil solicitacaoPerfil = new SolicitacaoPerfil();
-        solicitacaoPerfil.setPerfil(perfilService.salvar(perfil));
-        Usuario usuario = buscarUsuarioPorKcId(sessionId);
-        solicitacaoPerfil.setSolicitante(usuario);
-        solicitacaoPerfil.setDocumentos(armazenamentoService.salvarArquivo(arquivos));
-        return solicitacaoPerfilService.solicitarPerfil(solicitacaoPerfil);
+        Perfil perfilSalvo = perfilService.salvar(perfil);
+        Usuario solicitante = buscarUsuarioPorKcId(sessionId);
+        List<Documento> documentos = armazenamentoService.salvarArquivo(arquivos);
+        return solicitacaoPerfilService.solicitarPerfil(perfilSalvo, solicitante, documentos);
     }
 
     public SolicitacaoPerfil buscarSolicitacao(Long id, String sessionId) throws SolicitacaoNotFoundException {
         SolicitacaoPerfil solicitacao = solicitacaoPerfilService.buscarSolicitacao(id);
         if(!solicitacao.getSolicitante().getKcId().equals(sessionId) && !keycloakService.hasRoleAdmin(sessionId)){
-            throw new SolicitacaoAccessDeniedException("Você não tem permissão para acessar essa solicitação.");
+            throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
         return solicitacaoPerfilService.buscarSolicitacao(id);
     }

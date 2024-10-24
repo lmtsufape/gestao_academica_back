@@ -10,11 +10,12 @@ public interface UsuarioService {
 
     Usuario editarUsuario(String idSessao, Usuario novoUsuario) throws UsuarioNotFoundException;
 
-    Usuario buscarUsuario(Long id) throws UsuarioNotFoundException;
+    Usuario buscarUsuario(Long id, boolean isAdmin, String sessionId) throws UsuarioNotFoundException;
 
     Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException;
 
     List<Usuario> listarUsuarios();
 
     void deletarUsuario(String sessionId) throws UsuarioNotFoundException;
+
 }
