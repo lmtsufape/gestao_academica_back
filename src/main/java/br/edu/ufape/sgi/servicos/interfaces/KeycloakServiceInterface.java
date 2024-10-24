@@ -43,4 +43,6 @@ public interface KeycloakServiceInterface {
     void deleteUser(String userId);
 
     String getUserId(String username);
+
+    boolean hasRoleAdmin(String accessToken);
 }

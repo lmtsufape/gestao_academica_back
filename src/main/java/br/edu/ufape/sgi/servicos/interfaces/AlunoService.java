@@ -6,7 +6,6 @@ import br.edu.ufape.sgi.models.Aluno;
 import java.util.List;
 
 public interface AlunoService {
-    Aluno salvar(Aluno aluno);
 
     Aluno buscarAluno(Long id) throws AlunoNotFoundException;
 

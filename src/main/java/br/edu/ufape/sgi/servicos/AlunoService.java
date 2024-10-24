@@ -1,11 +1,9 @@
 package br.edu.ufape.sgi.servicos;
 
 import br.edu.ufape.sgi.dados.AlunoRepository;
-import br.edu.ufape.sgi.exceptions.ExceptionUtil;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sgi.models.Aluno;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +12,6 @@ import java.util.List;
 
 public class AlunoService implements br.edu.ufape.sgi.servicos.interfaces.AlunoService {
     private final AlunoRepository alunoRepository;
-
-
-    @Override
-    public Aluno salvar(Aluno aluno) {
-        try {
-            return alunoRepository.save(aluno);
-        }catch (DataIntegrityViolationException e){
-            ExceptionUtil.handleDataIntegrityViolationException(e);
-            return null;
-        }
-    }
 
     @Override
     public Aluno buscarAluno(Long id) throws AlunoNotFoundException {
