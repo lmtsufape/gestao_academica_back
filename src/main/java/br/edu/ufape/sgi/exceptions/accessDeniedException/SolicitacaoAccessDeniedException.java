@@ -1,4 +1,4 @@
-package br.edu.ufape.sgi.exceptions;
+package br.edu.ufape.sgi.exceptions.accessDeniedException;
 
 import org.springframework.security.access.AccessDeniedException;
 

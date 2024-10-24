@@ -4,7 +4,7 @@ package br.edu.ufape.sgi.fachada;
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
 import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.SolicitacaoAccessDeniedException;
+import br.edu.ufape.sgi.exceptions.accessDeniedException.SolicitacaoAccessDeniedException;
 import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
