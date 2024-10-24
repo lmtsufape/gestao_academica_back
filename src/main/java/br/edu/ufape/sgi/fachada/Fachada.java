@@ -4,7 +4,7 @@ package br.edu.ufape.sgi.fachada;
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
 import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.accessDeniedException.SolicitacaoAccessDeniedException;
+import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
@@ -49,11 +49,16 @@ public class Fachada {
     // ================== Aluno ================== //
 
 
-    public Aluno buscarAluno(Long id) throws AlunoNotFoundException { return alunoService.buscarAluno(id);
+    public List<Usuario> listarAlunos() {
+        return alunoService.listarAlunos();
     }
-    public List<Aluno> listarAlunos() {return alunoService.listarAlunos();}
 
-    public void deletarAluno(Long id) throws AlunoNotFoundException {alunoService.deletarAluno(id);}
+    public Usuario buscarAluno(Long id, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return alunoService.buscarAluno(id, isAdmin, sessionId);
+    }
+
+
 
     // ================== Usuario ================== //
     @Transactional
@@ -80,7 +85,9 @@ public class Fachada {
 
     public Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException {return usuarioService.buscarUsuarioPorKcId(kcId);}
 
-    public Usuario buscarUsuario(Long id) throws UsuarioNotFoundException {return usuarioService.buscarUsuario(id);}
+    public Usuario buscarUsuario(Long id, String sessionId) throws UsuarioNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return usuarioService.buscarUsuario(id, isAdmin, sessionId);}
 
     public List<Usuario> listarUsuarios() {return usuarioService.listarUsuarios();}
 
@@ -125,7 +132,7 @@ public class Fachada {
     public SolicitacaoPerfil buscarSolicitacao(Long id, String sessionId) throws SolicitacaoNotFoundException {
         SolicitacaoPerfil solicitacao = solicitacaoPerfilService.buscarSolicitacao(id);
         if(!solicitacao.getSolicitante().getKcId().equals(sessionId) && !keycloakService.hasRoleAdmin(sessionId)){
-            throw new SolicitacaoAccessDeniedException("Você não tem permissão para acessar essa solicitação.");
+            throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
         return solicitacaoPerfilService.buscarSolicitacao(id);
     }

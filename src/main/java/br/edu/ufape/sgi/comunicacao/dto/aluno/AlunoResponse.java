@@ -1,7 +1,8 @@
 package br.edu.ufape.sgi.comunicacao.dto.aluno;
 
+import br.edu.ufape.sgi.comunicacao.dto.curso.CursoResponse;
 import br.edu.ufape.sgi.comunicacao.dto.usuario.UsuarioResponse;
-import br.edu.ufape.sgi.models.Aluno;
+import br.edu.ufape.sgi.models.Usuario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,10 +11,12 @@ import org.modelmapper.ModelMapper;
 @Getter @Setter @NoArgsConstructor
 public class AlunoResponse extends UsuarioResponse {
     String matricula;
-    String curso;
+    CursoResponse curso;
 
-    public AlunoResponse(Aluno aluno, ModelMapper modelMapper){
-        if (aluno == null) throw new IllegalArgumentException("Aluno não pode ser nulo");
-        else modelMapper.map(aluno, this);
+    public AlunoResponse(Usuario usuario, ModelMapper modelMapper){
+        if (usuario == null) throw new IllegalArgumentException("Aluno não pode ser nulo");
+        else modelMapper.map(usuario, this);
+        this.matricula = usuario.getAluno().getMatricula();
+        this.curso = new CursoResponse(usuario.getAluno().getCurso(), modelMapper);
     }
 }
