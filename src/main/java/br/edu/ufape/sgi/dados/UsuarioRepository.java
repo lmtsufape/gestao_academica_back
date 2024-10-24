@@ -15,4 +15,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findUsuariosAlunos();
     @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Professor AND u.ativo = true")
     List<Usuario> findUsuariosProfessores();
+    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Tecnico AND u.ativo = true")
+    List<Usuario> findUsuariosTecnicos();
 }

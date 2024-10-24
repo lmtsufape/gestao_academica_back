@@ -67,4 +67,8 @@ public class Usuario {
     public Professor getProfessor() {
         return perfis.stream().filter(perfil -> perfil instanceof Professor).map(perfil -> (Professor) perfil).findFirst().orElseThrow();
     }
+
+    public Tecnico getTecnico() {
+        return perfis.stream().filter(perfil -> perfil instanceof Tecnico).map(perfil -> (Tecnico) perfil).findFirst().orElseThrow();
+    }
 }

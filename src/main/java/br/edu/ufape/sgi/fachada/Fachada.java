@@ -30,6 +30,7 @@ public class Fachada {
     private final ArmazenamentoService armazenamentoService;
     private final PerfilService perfilService;
     private final ProfessorService professorService;
+    private final TecnicoService tecnicoService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -67,6 +68,17 @@ public class Fachada {
         return professorService.buscarProfessor(id, isAdmin, sessionId);
     }
 
+
+    // ================== Tecnico ================== //
+
+    public List<Usuario> listarTecnicos(){
+        return tecnicoService.getTecnicos();
+    }
+
+    public Usuario buscarTecnico(Long id, String sessionId) throws UsuarioNotFoundException, TecnicoNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return tecnicoService.buscarTecnico(id, isAdmin, sessionId);
+    }
 
 
     // ================== Usuario ================== //

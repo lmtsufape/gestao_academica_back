@@ -5,6 +5,7 @@ import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoRequest;
 import br.edu.ufape.sgi.comunicacao.dto.professor.ProfessorRequest;
 import br.edu.ufape.sgi.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilResponse;
 import br.edu.ufape.sgi.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilRequest;
+import br.edu.ufape.sgi.comunicacao.dto.tecnico.TecnicoRequest;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
@@ -47,7 +48,12 @@ public class SolicitacaoPerfilController {
     }
 
 
-    //@PostMapping(value = "/tecnico", consumes = "multipart/form-data")
+    @PostMapping(value = "/tecnico", consumes = "multipart/form-data")
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilTecnico(@ModelAttribute TecnicoRequest tecnicoRequest) throws  UsuarioNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(tecnicoRequest.convertToEntity(modelMapper), principal.getSubject(), tecnicoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+    }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/{id}/aprovar")
