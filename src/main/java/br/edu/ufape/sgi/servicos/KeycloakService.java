@@ -220,8 +220,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     @Override
     public boolean hasRoleAdmin(String accessToken) {
         try {
-            boolean isAdmin = keycloak.realm(realm).users().get(accessToken).roles().realmLevel().listEffective().stream().anyMatch(role -> role.getName().equals("administrador"));
-            return isAdmin;
+            return keycloak.realm(realm).users().get(accessToken).roles().realmLevel().listEffective().stream().anyMatch(role -> role.getName().equals("administrador"));
         } catch (Exception e) {
             throw new KeycloakAuthenticationException("Erro ao verificar se o usuário tem a role de administrador.", e);
         }

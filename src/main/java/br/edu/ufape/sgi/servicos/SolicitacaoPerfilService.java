@@ -8,7 +8,6 @@ import br.edu.ufape.sgi.models.Enums.StatusSolicitacao;
 import br.edu.ufape.sgi.models.SolicitacaoPerfil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ import java.util.List;
 @Service @RequiredArgsConstructor
 public class SolicitacaoPerfilService implements br.edu.ufape.sgi.servicos.interfaces.SolicitacaoPerfilService {
     private final SolicitacaoPerfilRepository solicitacaoPerfilRepository;
-    private final ModelMapper modelMapper;
+
 
 
     @Override

@@ -5,7 +5,6 @@ import br.edu.ufape.sgi.comunicacao.dto.usuario.UsuarioResponse;
 import br.edu.ufape.sgi.models.Enums.StatusSolicitacao;
 import br.edu.ufape.sgi.models.Perfil;
 import br.edu.ufape.sgi.models.SolicitacaoPerfil;
-import br.edu.ufape.sgi.models.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

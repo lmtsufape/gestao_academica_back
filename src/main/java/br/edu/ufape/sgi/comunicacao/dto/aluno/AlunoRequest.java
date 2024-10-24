@@ -1,7 +1,7 @@
 package br.edu.ufape.sgi.comunicacao.dto.aluno;
 
 
-import br.edu.ufape.sgi.comunicacao.dto.usuario.UsuarioRequest;
+
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
 import br.edu.ufape.sgi.fachada.Fachada;
 import br.edu.ufape.sgi.models.Aluno;

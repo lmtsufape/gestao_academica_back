@@ -9,7 +9,6 @@ import br.edu.ufape.sgi.exceptions.notFoundExceptions.SolicitacaoNotFoundExcepti
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.fachada.Fachada;
 import br.edu.ufape.sgi.models.Aluno;
-import br.edu.ufape.sgi.models.SolicitacaoPerfil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
