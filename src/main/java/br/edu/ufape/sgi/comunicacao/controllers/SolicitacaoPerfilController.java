@@ -2,6 +2,7 @@ package br.edu.ufape.sgi.comunicacao.controllers;
 
 
 import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoRequest;
+import br.edu.ufape.sgi.comunicacao.dto.professor.ProfessorRequest;
 import br.edu.ufape.sgi.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilResponse;
 import br.edu.ufape.sgi.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilRequest;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
@@ -38,7 +39,12 @@ public class SolicitacaoPerfilController {
     }
 
 
-    //@PostMapping(value = "/professor", consumes = "multipart/form-data")
+    @PostMapping(value = "/professor", consumes = "multipart/form-data")
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilProfessor(@ModelAttribute ProfessorRequest professorRequest) throws  UsuarioNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(professorRequest.convertToEntity(modelMapper, fachada), principal.getSubject(), professorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+    }
 
 
     //@PostMapping(value = "/tecnico", consumes = "multipart/form-data")

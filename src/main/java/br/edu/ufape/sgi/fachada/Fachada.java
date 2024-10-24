@@ -6,11 +6,8 @@ import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
 import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.*;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sgi.models.*;
 import br.edu.ufape.sgi.servicos.interfaces.*;
 import jakarta.transaction.Transactional;
@@ -32,6 +29,7 @@ public class Fachada {
     private final SolicitacaoPerfilService solicitacaoPerfilService;
     private final ArmazenamentoService armazenamentoService;
     private final PerfilService perfilService;
+    private final ProfessorService professorService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -56,6 +54,17 @@ public class Fachada {
     public Usuario buscarAluno(Long id, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException {
         boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
         return alunoService.buscarAluno(id, isAdmin, sessionId);
+    }
+
+
+    // ================== Professor ================== //
+    public List<Usuario> listarProfessores() {
+        return professorService.listarProfessores();
+    }
+
+    public Usuario buscarProfessor(Long id, String sessionId) throws UsuarioNotFoundException, ProfessorNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return professorService.buscarProfessor(id, isAdmin, sessionId);
     }
 
 
