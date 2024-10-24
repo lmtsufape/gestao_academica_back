@@ -116,12 +116,10 @@ public class Fachada {
     // ================== SolicitacaoPerfil ================== //
     @Transactional
     public SolicitacaoPerfil solicitarPerfil(Perfil perfil, String sessionId, MultipartFile[] arquivos) throws UsuarioNotFoundException, SolicitacaoDuplicadaException {
-        SolicitacaoPerfil solicitacaoPerfil = new SolicitacaoPerfil();
-        solicitacaoPerfil.setPerfil(perfilService.salvar(perfil));
-        Usuario usuario = buscarUsuarioPorKcId(sessionId);
-        solicitacaoPerfil.setSolicitante(usuario);
-        solicitacaoPerfil.setDocumentos(armazenamentoService.salvarArquivo(arquivos));
-        return solicitacaoPerfilService.solicitarPerfil(solicitacaoPerfil);
+        Perfil perfilSalvo = perfilService.salvar(perfil);
+        Usuario solicitante = buscarUsuarioPorKcId(sessionId);
+        List<Documento> documentos = armazenamentoService.salvarArquivo(arquivos);
+        return solicitacaoPerfilService.solicitarPerfil(perfilSalvo, solicitante, documentos);
     }
 
     public SolicitacaoPerfil buscarSolicitacao(Long id, String sessionId) throws SolicitacaoNotFoundException {

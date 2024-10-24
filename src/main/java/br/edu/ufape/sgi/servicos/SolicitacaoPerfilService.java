@@ -4,8 +4,11 @@ package br.edu.ufape.sgi.servicos;
 import br.edu.ufape.sgi.dados.SolicitacaoPerfilRepository;
 import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
 import br.edu.ufape.sgi.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
+import br.edu.ufape.sgi.models.Documento;
 import br.edu.ufape.sgi.models.Enums.StatusSolicitacao;
+import br.edu.ufape.sgi.models.Perfil;
 import br.edu.ufape.sgi.models.SolicitacaoPerfil;
+import br.edu.ufape.sgi.models.Usuario;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +24,11 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sgi.servicos.inter
 
     @Override
     @Transactional
-    public SolicitacaoPerfil solicitarPerfil(SolicitacaoPerfil solicitacaoPerfil) throws SolicitacaoDuplicadaException {
-
+    public SolicitacaoPerfil solicitarPerfil(Perfil perfil, Usuario solicitante, List<Documento> documentos) throws SolicitacaoDuplicadaException {
+        SolicitacaoPerfil solicitacaoPerfil = new SolicitacaoPerfil();
+        solicitacaoPerfil.setPerfil(perfil);
+        solicitacaoPerfil.setSolicitante(solicitante);
+        solicitacaoPerfil.setDocumentos(documentos);
         solicitacaoPerfil.setStatus(StatusSolicitacao.PENDENTE);
         solicitacaoPerfil.setDataSolicitacao(LocalDateTime.now());
         List<SolicitacaoPerfil> solicitacoes = solicitacaoPerfilRepository.findBySolicitanteAndStatusIn(
