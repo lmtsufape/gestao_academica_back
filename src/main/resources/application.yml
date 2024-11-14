@@ -50,7 +50,7 @@ keycloak:
     client-id: sgu-application
 
 common:
-  front: http://localhost:3000/
+  front: http://localhost:3000/, https://sgiufape.vercel.app/
 
 logging:
   level:
