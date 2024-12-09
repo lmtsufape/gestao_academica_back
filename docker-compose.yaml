@@ -16,6 +16,8 @@ services:
     depends_on:
       - backend-db
       - keycloak
+    volumes:
+      - ./storage:/app/storage
 
   backend-db:
     image: postgres:16.0

@@ -4,6 +4,7 @@ import br.edu.ufape.sgi.models.Documento;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ArmazenamentoService implements br.edu.ufape.sgi.servicos.interfaces.ArmazenamentoService {
     private final List<String> tiposPermitidos = List.of("application/pdf", "image/jpeg", "image/png", "image/jpg");
+    @Value("${arquivo.diretorio-upload}")
+    private String uploadDir;
 
     @Transactional
     @Override
@@ -34,7 +37,7 @@ public class ArmazenamentoService implements br.edu.ufape.sgi.servicos.interface
 
             try {
                 // Salva o arquivo no diretório desejado
-                String uploadDir = "src/main/java/br/edu/ufape/sgi/storage/";
+
                 Path caminho = Paths.get(uploadDir, nomeArquivoComUUID);
                 Files.copy(arquivo.getInputStream(), caminho);
 
