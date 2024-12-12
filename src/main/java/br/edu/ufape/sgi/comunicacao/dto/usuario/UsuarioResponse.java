@@ -2,9 +2,10 @@ package br.edu.ufape.sgi.comunicacao.dto.usuario;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public abstract class UsuarioResponse {
     Long id;
     String nome;
