@@ -1,18 +1,27 @@
 # src/main/resources/application.yml
+
+arquivo:
+  diretorio-upload: /app/storage
 server:
   port: 8081
+  error:
+    include-stacktrace: never
 
 spring:
   application:
-    name: sgi-back
+    name: sgu-back
   web:
     locale-resolver: fixed
     locale: pt_BR
   devtools:
     livereload:
       enabled: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 20MB
   datasource:
-    url: jdbc:postgresql://localhost:5432/sgi
+    url: jdbc:postgresql://localhost:5432/sgu
     username: postgres
     password: baryonmode
   jpa:
@@ -26,11 +35,26 @@ spring:
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8080/realms/sgi
+            issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
             user-name-attribute: preferred_username
       resourceserver:
         jwt:
           jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
+springdoc:
+  api-docs:
+    path: /api-doc/docs
+  swagger-ui:
+    path: /api-doc/swagger.html
+
+keycloak:
+    auth-server-url: http://localhost:8080/
+    realm: sgu-ufape
+    client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
+    client-id: sgu-application
+
+common:
+  front: http://localhost:3000/, https://sgiufape.vercel.app/
+
 logging:
   level:
     org:
@@ -41,11 +65,16 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: jdbc:postgresql://backend-db:5432/sgi
+    url: jdbc:postgresql://backend-db:5432/sgu
     username: postgres
     password: baryonmode
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://keycloak:8080/realms/lmts/protocol/openid-connect/certs
+          jwk-set-uri: ${keycloak.auth-server-url}realms/${keycloak.realm}/protocol/openid-connect/certs
+keycloak:
+  auth-server-url: http://keycloak:8080/
+  realm: sgu-ufape
+  client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
+  client-id: sgu-application

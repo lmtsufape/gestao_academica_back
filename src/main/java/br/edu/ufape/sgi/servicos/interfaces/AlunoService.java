@@ -1,16 +1,14 @@
 package br.edu.ufape.sgi.servicos.interfaces;
 
-import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
-import br.edu.ufape.sgi.models.Aluno;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
+import br.edu.ufape.sgi.models.Usuario;
 
 import java.util.List;
 
 public interface AlunoService {
-    Aluno salvar(Aluno aluno);
 
-    Aluno buscarAluno(Long id) throws AlunoNotFoundException;
+    List<Usuario> listarAlunos();
 
-    List<Aluno> listarAlunos();
-
-    void deletarAluno(Long id) throws AlunoNotFoundException;
+    Usuario buscarAluno(Long id, boolean isAdm, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException;
 }

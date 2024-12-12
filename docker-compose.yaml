@@ -1,27 +1,29 @@
 version: '3.9'
 services:
   backend:
-    image: sgi-backend
+    image: sgu-backend
     build: .
     ports:
       - "8081:8081"
     command: mvn spring-boot:run
     networks:
-      - sgi-networks
+      - sgu-networks
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://backend-db:5432/sgi
+      SPRING_DATASOURCE_URL: jdbc:postgresql://backend-db:5432/sgu
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
     depends_on:
       - backend-db
       - keycloak
+    volumes:
+      - ./storage:/app/storage
 
   backend-db:
     image: postgres:16.0
     restart: always
     environment:
-      POSTGRES_DB: sgi
+      POSTGRES_DB: sgu
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       TZ: America/Sao_Paulo
@@ -30,28 +32,31 @@ services:
     expose:
       - "5432"
     networks:
-      - sgi-networks
+      - sgu-networks
     volumes:
       - pg-data:/var/lib/postgresql/data
+
   keycloak:
     image: quay.io/keycloak/keycloak
     ports:
       - "8080:8080"
     networks:
-        - sgi-networks
+      - sgu-networks
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      DB_VENDOR: POSTGRES
-      DB_ADDR: keycloak-db
-      DB_PORT: 5432
-      DB_DATABASE: keycloak
-      DB_USER: postgres
-      DB_SCHEMA: public
-      DB_PASSWORD: password
-    command: start-dev
+      KC_DB: postgres
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: password
+      KC_DB_SCHEMA: public
+    command: start-dev --import-realm
     depends_on:
       - keycloak-db
+    volumes:
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
 
   keycloak-db:
     image: postgres:16.0
@@ -63,10 +68,8 @@ services:
       TZ: America/Sao_Paulo
     ports:
       - "5434:5432"
-    expose:
-      - "5432"
     networks:
-        - sgi-networks
+      - sgu-networks
     volumes:
       - keycloak-pg-data:/var/lib/postgresql/data
 
@@ -77,5 +80,5 @@ volumes:
     driver: local
 
 networks:
-    sgi-networks:
+    sgu-networks:
         driver: bridge

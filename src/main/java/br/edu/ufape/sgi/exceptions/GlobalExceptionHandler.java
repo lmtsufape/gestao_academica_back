@@ -1,5 +1,8 @@
 package br.edu.ufape.sgi.exceptions;
 
+import br.edu.ufape.sgi.comunicacao.dto.erros.ErrorResponse;
+import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
+import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,7 +22,7 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UniqueConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> handleUniqueConstraintViolation(UniqueConstraintViolationException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("field", ex.getField());
@@ -29,15 +32,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+            @NonNull MethodArgumentNotValidException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        Map<String, Map<String,String>> ret = new HashMap<>();
+        Map<String, Map<String, String>> ret = new HashMap<>();
         ret.put("errors", errors);
         return new ResponseEntity<>(ret, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(KeycloakAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleKeycloakAuthenticationException(KeycloakAuthenticationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 }

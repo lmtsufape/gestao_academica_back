@@ -1,11 +1,13 @@
 package br.edu.ufape.sgi.servicos;
 
-import br.edu.ufape.sgi.dados.AlunoRepository;
-import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
-import br.edu.ufape.sgi.models.Aluno;
+
+import br.edu.ufape.sgi.dados.UsuarioRepository;
+import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
+import br.edu.ufape.sgi.models.Enums.TipoPerfil;
+import br.edu.ufape.sgi.models.Usuario;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,33 +15,23 @@ import java.util.List;
 @Service @RequiredArgsConstructor
 
 public class AlunoService implements br.edu.ufape.sgi.servicos.interfaces.AlunoService {
-    private final AlunoRepository alunoRepository;
-
+    private final UsuarioRepository usuarioRepository;
 
     @Override
-    public Aluno salvar(Aluno aluno) {
-        try {
-            return alunoRepository.save(aluno);
-        }catch (DataIntegrityViolationException e){
-            ExceptionUtil.handleDataIntegrityViolationException(e);
-            return null;
+    public List<Usuario> listarAlunos() {
+        return usuarioRepository.findUsuariosAlunos();
+    }
+
+    @Override
+    public Usuario buscarAluno(Long id, boolean isAdm, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
+        if(!isAdm && !usuario.getKcId().equals(sessionId)) {
+            throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
-    }
-
-    @Override
-    public Aluno buscarAluno(Long id) throws AlunoNotFoundException {
-        return alunoRepository.findById(id).orElseThrow(AlunoNotFoundException::new);
-    }
-
-    @Override
-    public List<Aluno> listarAlunos() {
-        return alunoRepository.findAll();
-    }
-
-    @Override
-    public void deletarAluno(Long id) throws AlunoNotFoundException {
-        if (!alunoRepository.existsById(id)) throw new AlunoNotFoundException();
-        alunoRepository.deleteById(id);
+        if(usuario.getPerfis().stream().noneMatch(perfil -> perfil.getTipo().equals(TipoPerfil.ALUNO))) {
+            throw new AlunoNotFoundException();
+        }
+        return usuario;
     }
 
 }
