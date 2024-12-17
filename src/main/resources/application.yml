@@ -23,7 +23,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/sgu
     username: postgres
-    password: 55555
+    password: baryonmode
   jpa:
     hibernate:
       ddl-auto: update
@@ -67,7 +67,7 @@ spring:
   datasource:
     url: jdbc:postgresql://backend-db:5432/sgu
     username: postgres
-    password: password
+    password: baryonmode
   security:
     oauth2:
       resourceserver:
