@@ -1,7 +1,6 @@
 package br.edu.ufape.sgi.fachada;
 
 
-import br.edu.ufape.sgi.exceptions.aluno.AlunoNotFoundException;
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
