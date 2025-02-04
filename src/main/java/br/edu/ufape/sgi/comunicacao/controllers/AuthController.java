@@ -31,5 +31,11 @@ public class AuthController {
         fachada.logout(accessToken, refreshToken);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestParam("email") String email) {
+        fachada.resetPassword(email);
+        return ResponseEntity.noContent().build();
+    }
 }
 

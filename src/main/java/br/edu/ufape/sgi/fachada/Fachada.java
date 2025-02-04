@@ -48,6 +48,10 @@ public class Fachada {
         keycloakService.logout(accessToken, refreshToken);
     }
 
+    public void resetPassword(String email) {
+        keycloakService.resetPassword(email);
+    }
+
     // ================== Aluno ================== //
 
 
