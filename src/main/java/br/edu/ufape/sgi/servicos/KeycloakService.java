@@ -226,4 +226,31 @@ public class KeycloakService implements KeycloakServiceInterface {
         }
     }
 
+    @Override
+    public void resetPassword(String email) throws KeycloakAuthenticationException {
+        try {
+            // Busca o usuário pelo email
+            List<UserRepresentation> users = keycloak.realm(realm).users().search(null, null, null, email, null, null);
+
+            if (users == null || users.isEmpty()) {
+                throw new KeycloakAuthenticationException("Usuário com email " + email + " não encontrado.");
+            }
+
+            UserRepresentation user = users.getFirst();
+            String userId = user.getId();
+
+            // Configura a ação de redefinição de senha
+            List<String> actions = Collections.singletonList("UPDATE_PASSWORD");
+            keycloak.realm(realm).users().get(userId).executeActionsEmail(actions);
+
+            // Log de sucesso
+            System.out.println("E-mail de redefinição de senha enviado com sucesso para o usuário: " + email);
+
+        } catch (KeycloakAuthenticationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new KeycloakAuthenticationException("Erro ao processar a solicitação de redefinição de senha.", e);
+        }
+    }
+
 }

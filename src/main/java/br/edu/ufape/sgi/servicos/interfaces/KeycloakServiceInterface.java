@@ -45,4 +45,6 @@ public interface KeycloakServiceInterface {
     String getUserId(String username);
 
     boolean hasRoleAdmin(String accessToken);
+
+    void resetPassword(String email);
 }
