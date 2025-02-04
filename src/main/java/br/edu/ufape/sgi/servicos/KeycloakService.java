@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
@@ -159,7 +160,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     public void createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
         try {
             // Configurar as credenciais do usuário
-            UserRepresentation user = KeycloakServiceInterface.getUserRepresentation(email, password);
+            UserRepresentation user = getUserRepresentation(email, password);
 
             // Criar o usuário no Keycloak
             Response response = keycloak.realm(realm).users().create(user);
@@ -176,6 +177,10 @@ public class KeycloakService implements KeycloakServiceInterface {
             String userId = keycloak.realm(realm).users().search(email).getFirst().getId();
             RoleRepresentation userRole = keycloak.realm(realm).roles().get(role).toRepresentation();
             keycloak.realm(realm).users().get(userId).roles().realmLevel().add(Collections.singletonList(userRole));
+
+            // Enviar e-mail de confirmação
+            List<String> actions = Collections.singletonList("VERIFY_EMAIL");
+            keycloak.realm(realm).users().get(userId).executeActionsEmail(actions);
 
         } catch (NotFoundException e) {
             throw new KeycloakAuthenticationException("Role " + role + " não encontrado no Keycloak.", e);
@@ -251,6 +256,26 @@ public class KeycloakService implements KeycloakServiceInterface {
         } catch (Exception e) {
             throw new KeycloakAuthenticationException("Erro ao processar a solicitação de redefinição de senha.", e);
         }
+    }
+
+    static UserRepresentation getUserRepresentation(String email, String password) {
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setTemporary(false);
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(password);
+
+        // Configurar o novo usuário
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(email);
+        user.setFirstName(email);
+        user.setLastName(email);
+        user.setEmail(email);
+        user.setEnabled(true);
+        user.setEmailVerified(false);
+        user.setCredentials(Collections.singletonList(credential));
+
+
+        return user;
     }
 
 }
