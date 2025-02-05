@@ -15,5 +15,16 @@ public abstract class Perfil {
 
     public abstract TipoPerfil getTipo();
 
+    // Foto de perfil armazenada em binário
+    @Lob
+    private byte[] fotoPerfil;  // Usando byte[] para armazenar a imagem em formato binário
+
+    public byte[] getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(byte[] fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
 
 }
