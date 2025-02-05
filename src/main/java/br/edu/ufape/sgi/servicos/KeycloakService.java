@@ -25,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service @RequiredArgsConstructor
 public class KeycloakService implements KeycloakServiceInterface {
@@ -94,6 +96,9 @@ public class KeycloakService implements KeycloakServiceInterface {
         } catch (HttpStatusCodeException e) {
             // Captura qualquer erro HTTP e retorna uma mensagem apropriada com base no status
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                if(!verifyEmailValid(email)){
+                    throw new KeycloakAuthenticationException("E-mail não verificado. Verifique sua caixa de entrada e clique no link de verificação.");
+                }
                 throw new KeycloakAuthenticationException("Credenciais inválidas. Verifique o email e a senha.");
             }
             throw new KeycloakAuthenticationException("Erro ao autenticar no Keycloak: " + e.getStatusCode(), e);
@@ -256,6 +261,21 @@ public class KeycloakService implements KeycloakServiceInterface {
         } catch (Exception e) {
             throw new KeycloakAuthenticationException("Erro ao processar a solicitação de redefinição de senha.", e);
         }
+    }
+
+    private boolean verifyEmailValid(String email){
+        List<UserRepresentation> users = keycloak.realm(realm).users().search(null, null, null, email, null, null);
+
+        Optional<UserRepresentation> userOptional = users.stream()
+                .filter(user -> email.equalsIgnoreCase(user.getEmail())) // Comparação exata
+                .findFirst();
+
+        if (userOptional.isPresent()) {
+            UserRepresentation user = userOptional.get();
+
+            return user.isEmailVerified();
+        }
+        return true;
     }
 
     static UserRepresentation getUserRepresentation(String email, String password) {
