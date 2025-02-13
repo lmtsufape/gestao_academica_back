@@ -14,6 +14,8 @@ import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import java.util.Optional;
 
 @Service @RequiredArgsConstructor
 public class KeycloakService implements KeycloakServiceInterface {
+    private static final Logger log = LoggerFactory.getLogger(KeycloakService.class);
     private Keycloak keycloak;
 
     @Value("${keycloak.realm}")
@@ -99,6 +102,7 @@ public class KeycloakService implements KeycloakServiceInterface {
                 if(!verifyEmailValid(email)){
                     throw new KeycloakAuthenticationException("E-mail não verificado. Verifique sua caixa de entrada e clique no link de verificação.");
                 }
+                log.warn("Credenciais inválidas. Verifique o email e a senha. Erro: {}", e, e);
                 throw new KeycloakAuthenticationException("Credenciais inválidas. Verifique o email e a senha.");
             }
             throw new KeycloakAuthenticationException("Erro ao autenticar no Keycloak: " + e.getStatusCode(), e);
@@ -173,8 +177,10 @@ public class KeycloakService implements KeycloakServiceInterface {
             // Verificar se a criação foi bem-sucedida
             if (response.getStatus() != 201) {
                 if (response.getStatus() == 409) {
+                    log.warn("Credenciais já existentes. Tente outro email. Ero: {}", response.getStatusInfo());
                     throw new KeycloakAuthenticationException("Credenciais já existentes. Tente outro email.");
                 }
+                log.error("Erro ao criar o usuário no Keycloak. Status: {}", response.getStatusInfo());
                 throw new KeycloakAuthenticationException("Erro ao criar o usuário no Keycloak. Status: " + response.getStatus());
             }
 
@@ -188,13 +194,15 @@ public class KeycloakService implements KeycloakServiceInterface {
             keycloak.realm(realm).users().get(userId).executeActionsEmail(actions);
 
         } catch (NotFoundException e) {
+            log.error("Erro: {} ",e, e);
             throw new KeycloakAuthenticationException("Role " + role + " não encontrado no Keycloak.", e);
 
         } catch (KeycloakAuthenticationException e) {
+            log.error("Erro: {}", e, e);
             throw e;  // Exceção já personalizada, não precisa de novo tratamento
 
         } catch (Exception e) {
-            // Captura de qualquer outro erro inesperado
+            log.error("Erro inesperado ao criar o usuário no Keycloak.{}", e, e);
             throw new KeycloakAuthenticationException("Erro inesperado ao criar o usuário no Keycloak.", e);
         }
     }
@@ -204,9 +212,12 @@ public class KeycloakService implements KeycloakServiceInterface {
         try {
             RoleRepresentation userRole = keycloak.realm(realm).roles().get(role).toRepresentation();
             keycloak.realm(realm).users().get(userId).roles().realmLevel().add(Collections.singletonList(userRole));
+            log.info("Papel {} adicionado ao usuário", role);
         } catch (NotFoundException e) {
+            log.error("Ocorreu um erro {}", e,e);
             throw new KeycloakAuthenticationException("Role " + role + " não encontrado no Keycloak.", e);
         }catch (Exception e) {
+            log.error("Erro inesperado ao adicionar papel ao usuário.{}", e, e);
             throw new KeycloakAuthenticationException("Erro inesperado ao adicionar papel ao usuário." + e.getMessage(), e);
         }
     }
@@ -214,6 +225,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     @Override
     public void deleteUser(String userId) {
         keycloak.realm(realm).users().get(userId).remove();
+        log.info("Usuário excluído com sucesso.");
     }
 
 
@@ -224,6 +236,7 @@ public class KeycloakService implements KeycloakServiceInterface {
         if (!user.isEmpty()) {
             return user.getFirst().getId();
         }
+        log.error("Usuário não encontrado.");
         throw new IndexOutOfBoundsException("User not found");
     }
 
@@ -232,6 +245,7 @@ public class KeycloakService implements KeycloakServiceInterface {
         try {
             return keycloak.realm(realm).users().get(accessToken).roles().realmLevel().listEffective().stream().anyMatch(role -> role.getName().equals("administrador"));
         } catch (Exception e) {
+            log.error("Erro ao verificar se o usuário tem a role de administrador.{}", e, e);
             throw new KeycloakAuthenticationException("Erro ao verificar se o usuário tem a role de administrador.", e);
         }
     }
@@ -249,16 +263,18 @@ public class KeycloakService implements KeycloakServiceInterface {
             UserRepresentation user = users.getFirst();
             String userId = user.getId();
 
-            // Configura a ação de redefinição de senha
+            log.info("Enviando e-mail de redefinição de senha para o usuário: {}", email);
             List<String> actions = Collections.singletonList("UPDATE_PASSWORD");
             keycloak.realm(realm).users().get(userId).executeActionsEmail(actions);
 
             // Log de sucesso
-            System.out.println("E-mail de redefinição de senha enviado com sucesso para o usuário: " + email);
+            log.info("E-mail de redefinição de senha enviado com sucesso para o usuário: {}", email);
 
         } catch (KeycloakAuthenticationException e) {
+            log.error("Erro: {}", e, e);
             throw e;
         } catch (Exception e) {
+            log.error("Erro ao processar a solicitação de redefinição de senha.{}", e, e);
             throw new KeycloakAuthenticationException("Erro ao processar a solicitação de redefinição de senha.", e);
         }
     }
@@ -267,7 +283,7 @@ public class KeycloakService implements KeycloakServiceInterface {
         List<UserRepresentation> users = keycloak.realm(realm).users().search(null, null, null, email, null, null);
 
         Optional<UserRepresentation> userOptional = users.stream()
-                .filter(user -> email.equalsIgnoreCase(user.getEmail())) // Comparação exata
+                .filter(user -> email.equalsIgnoreCase(user.getEmail()))
                 .findFirst();
 
         if (userOptional.isPresent()) {
