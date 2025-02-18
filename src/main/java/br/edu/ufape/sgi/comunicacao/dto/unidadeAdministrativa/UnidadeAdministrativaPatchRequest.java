@@ -1,6 +1,6 @@
 package br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa;
 
-import br.edu.ufape.sgi.models.Enums.TipoUnidadeAdministrativa;
+import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

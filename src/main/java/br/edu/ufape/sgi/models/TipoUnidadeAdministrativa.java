@@ -8,15 +8,11 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-
-public class UnidadeAdministrativa {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TipoUnidadeAdministrativa {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String nome;
-    private String codigo;
-
-    @ManyToOne
-    @JoinColumn(name = "tipo_id")
-    private TipoUnidadeAdministrativa tipo;
 }
