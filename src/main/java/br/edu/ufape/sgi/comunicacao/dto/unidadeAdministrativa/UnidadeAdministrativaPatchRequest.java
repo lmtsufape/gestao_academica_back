@@ -11,6 +11,6 @@ public abstract class UnidadeAdministrativaPatchRequest {
     private String nome;
 
     private String codigo;
-    
-    private TipoUnidadeAdministrativa tipoUnidade;
+
+    private TipoUnidadeAdministrativa tipo;
 }
