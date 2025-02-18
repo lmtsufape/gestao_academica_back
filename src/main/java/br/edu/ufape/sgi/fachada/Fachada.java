@@ -1,6 +1,7 @@
 package br.edu.ufape.sgi.fachada;
 
 
+import br.edu.ufape.sgi.exceptions.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class Fachada {
     private final AlunoService alunoService;
+    private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
     private final UnidadeAdministrativaService unidadeAdministrativaService;
     private final UsuarioService usuarioService;
     private final KeycloakServiceInterface keycloakService;
@@ -219,5 +221,25 @@ public class Fachada {
     public void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         unidadeAdministrativaService.deletarUnidadeAdministrativa(id);
     }
+
+
+    // ================== Tipo Unidade Administrativa ================== //
+
+    public TipoUnidadeAdministrativa salvarTipoUnidadeAdministrativa(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {
+        return tipoUnidadeAdministrativaService.salvar(tipoUnidadeAdministrativa);
+    }
+
+    public TipoUnidadeAdministrativa buscarTipoUnidadeAdministrativa(Long id) throws TipoUnidadeAdministrativaNotFoundException {
+        return tipoUnidadeAdministrativaService.buscarTipoUnidadeAdministrativa(id);
+    }
+
+    public List<TipoUnidadeAdministrativa> listarTiposUnidadeAdministrativa() {
+        return tipoUnidadeAdministrativaService.listarTiposUnidadeAdministrativa();
+    }
+
+    public void deletarTipoUnidadeAdministrativa(Long id) throws TipoUnidadeAdministrativaNotFoundException {
+        tipoUnidadeAdministrativaService.deletarTipoUnidadeAdministrativa(id);
+    }
+
 
 }

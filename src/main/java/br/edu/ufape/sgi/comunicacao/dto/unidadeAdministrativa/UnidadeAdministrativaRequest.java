@@ -2,7 +2,7 @@ package br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa;
 
 import br.edu.ufape.sgi.comunicacao.dto.aluno.AlunoRequest;
 import br.edu.ufape.sgi.models.Aluno;
-import br.edu.ufape.sgi.models.Enums.TipoUnidadeAdministrativa;
+import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ public class UnidadeAdministrativaRequest {
     @NotBlank(message = "O código é obrigatório")
     private String codigo;
 
-    @NotNull
+    @NotBlank(message = "O tipo é obrigatório")
     private TipoUnidadeAdministrativa tipo;
 
     public UnidadeAdministrativa convertToEntity(UnidadeAdministrativaRequest unidadeAdministrativaRequest, ModelMapper modelMapper) {
