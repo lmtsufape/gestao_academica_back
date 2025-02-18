@@ -1,6 +1,6 @@
 package br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa;
 
-import br.edu.ufape.sgi.models.Enums.TipoUnidadeAdministrativa;
+import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +11,6 @@ public abstract class UnidadeAdministrativaPatchRequest {
     private String nome;
 
     private String codigo;
-    
-    private TipoUnidadeAdministrativa tipoUnidade;
+
+    private TipoUnidadeAdministrativa tipo;
 }
