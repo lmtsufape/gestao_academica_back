@@ -167,6 +167,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 
     @Override
     public void createUser(String email, String password, String role) throws  KeycloakAuthenticationException {
+        String userId = null;
         try {
             // Configurar as credenciais do usuário
             UserRepresentation user = getUserRepresentation(email, password);
@@ -185,7 +186,7 @@ public class KeycloakService implements KeycloakServiceInterface {
             }
 
             // Atribuir o papel (role) ao usuário
-            String userId = keycloak.realm(realm).users().search(email).getFirst().getId();
+            userId = keycloak.realm(realm).users().search(email).getFirst().getId();
             RoleRepresentation userRole = keycloak.realm(realm).roles().get(role).toRepresentation();
             keycloak.realm(realm).users().get(userId).roles().realmLevel().add(Collections.singletonList(userRole));
 
@@ -195,14 +196,23 @@ public class KeycloakService implements KeycloakServiceInterface {
 
         } catch (NotFoundException e) {
             log.error("Erro: {} ",e, e);
+            if (userId != null) {
+                deleteUser(userId);
+            }
             throw new KeycloakAuthenticationException("Role " + role + " não encontrado no Keycloak.", e);
 
         } catch (KeycloakAuthenticationException e) {
             log.error("Erro: {}", e, e);
+            if (userId != null) {
+                deleteUser(userId);
+            }
             throw e;  // Exceção já personalizada, não precisa de novo tratamento
 
         } catch (Exception e) {
             log.error("Erro inesperado ao criar o usuário no Keycloak.{}", e, e);
+            if (userId != null) {
+                deleteUser(userId);
+            }
             throw new KeycloakAuthenticationException("Erro inesperado ao criar o usuário no Keycloak.", e);
         }
     }
