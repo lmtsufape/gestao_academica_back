@@ -14,6 +14,9 @@ import br.edu.ufape.sgi.models.*;
 import br.edu.ufape.sgi.servicos.interfaces.*;
 
 import lombok.RequiredArgsConstructor;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component @RequiredArgsConstructor
 
 public class Fachada {
+    private static final Logger log = LoggerFactory.getLogger(Fachada.class);
     private final AlunoService alunoService;
     private final UnidadeAdministrativaService unidadeAdministrativaService;
     private final UsuarioService usuarioService;
@@ -90,6 +95,24 @@ public class Fachada {
 
 
     // ================== Usuario ================== //
+    @Transactional
+    public void removerUsuariosNaoVerificados(int horas) {
+        List<UserRepresentation> usuariosNaoVerificados = keycloakService.listUnverifiedUsers();
+
+        for (UserRepresentation user : usuariosNaoVerificados) {
+            long diferenca = System.currentTimeMillis() - user.getCreatedTimestamp();
+            if(diferenca > TimeUnit.HOURS.toMillis(horas)){
+                try {
+                    usuarioService.deletarUsuarioKcId(user.getId());
+                    keycloakService.deleteUser(user.getId());
+                    log.info("Usuário não verificado removido");
+                }
+                 catch (Exception e){
+                    log.error("Erro ao deletar usuário não verificado: {}", e.getMessage());
+                }
+            }
+        }
+    }
     @Transactional
     public Usuario salvarUsuario(Usuario usuario, String senha) {
         String userKcId = null;
