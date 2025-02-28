@@ -17,6 +17,7 @@ import java.util.Set;
 public class Usuario {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String kcId;
     private String nome;
     private String nomeSocial;

@@ -58,6 +58,13 @@ public class UsuarioService implements br.edu.ufape.sgi.servicos.interfaces.Usua
         usuarioRepository.save(usuario);
     }
 
+    @Override
+    public void deletarUsuarioKcId(String kcId) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioRepository.findByKcId(kcId).orElseThrow(UsuarioNotFoundException::new);
+        usuario.setAtivo(false);
+        usuarioRepository.save(usuario);
+    }
+
 
 
 }

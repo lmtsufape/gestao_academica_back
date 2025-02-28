@@ -9,9 +9,10 @@ import br.edu.ufape.sgi.models.Enums.StatusSolicitacao;
 import br.edu.ufape.sgi.models.Perfil;
 import br.edu.ufape.sgi.models.SolicitacaoPerfil;
 import br.edu.ufape.sgi.models.Usuario;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;

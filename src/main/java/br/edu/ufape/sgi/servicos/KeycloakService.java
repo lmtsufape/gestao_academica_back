@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service @RequiredArgsConstructor
@@ -322,6 +323,13 @@ public class KeycloakService implements KeycloakServiceInterface {
 
 
         return user;
+    }
+
+    @Override
+    public List<UserRepresentation> listUnverifiedUsers() {
+        return keycloak.realm(realm).users().list().stream()
+                .filter(user -> !user.isEmailVerified())
+                .collect(Collectors.toList());
     }
 
 }

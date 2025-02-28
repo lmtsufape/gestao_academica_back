@@ -3,6 +3,9 @@ package br.edu.ufape.sgi.servicos.interfaces;
 import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
 import jakarta.annotation.PostConstruct;
+import org.keycloak.representations.idm.UserRepresentation;
+
+import java.util.List;
 
 
 public interface KeycloakServiceInterface {
@@ -28,4 +31,6 @@ public interface KeycloakServiceInterface {
     boolean hasRoleAdmin(String accessToken);
 
     void resetPassword(String email);
+
+    List<UserRepresentation> listUnverifiedUsers();
 }
