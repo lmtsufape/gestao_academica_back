@@ -12,10 +12,11 @@ import br.edu.ufape.sgi.exceptions.notFoundExceptions.*;
 import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
 import br.edu.ufape.sgi.models.*;
 import br.edu.ufape.sgi.servicos.interfaces.*;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 

@@ -1,11 +1,12 @@
 package br.edu.ufape.sgi.servicos;
 
 import br.edu.ufape.sgi.models.Documento;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
