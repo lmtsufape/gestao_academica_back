@@ -13,6 +13,8 @@ import br.edu.ufape.sgi.fachada.Fachada;
 import br.edu.ufape.sgi.models.Aluno;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -69,6 +72,15 @@ public class SolicitacaoPerfilController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.rejeitarSolicitacao(id, parecer.convertToEntity(modelMapper), principal.getSubject()), modelMapper), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/documentos")
+    public ResponseEntity<Resource> baixarTodosDocumentos(@PathVariable Long id) throws IOException, SolicitacaoNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"documentos.zip\"")
+                .body(fachada.baixarDocumentosSolicitacao(id, principal.getSubject()));
     }
 
 

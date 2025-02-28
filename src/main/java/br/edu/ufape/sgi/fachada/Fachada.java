@@ -17,12 +17,14 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -203,6 +205,14 @@ public class Fachada {
 
     public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
         return solicitacaoPerfilService.listarSolicitacoesPendentes();
+    }
+
+    public Resource baixarDocumentosSolicitacao(Long id, String sessionId) throws SolicitacaoNotFoundException, IOException {
+        SolicitacaoPerfil solicitacao = solicitacaoPerfilService.buscarSolicitacao(id);
+        if(!solicitacao.getSolicitante().getKcId().equals(sessionId) && !keycloakService.hasRoleAdmin(sessionId)){
+            throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
+        }
+        return armazenamentoService.carregarArquivoZip(solicitacao.getDocumentos());
     }
 
     @Transactional
