@@ -1,4 +1,4 @@
-package br.edu.ufape.sgi.seeds;
+/*package br.edu.ufape.sgi.seeds;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -30,4 +30,4 @@ public class UnidadeAdministrativaSeeder implements CommandLineRunner {
             System.out.println("Seed já foi executado anteriormente.");
         }
     }
-}
+}*/

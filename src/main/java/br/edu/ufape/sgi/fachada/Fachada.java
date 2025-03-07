@@ -1,19 +1,10 @@
 package br.edu.ufape.sgi.fachada;
 
 
-import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sgi.models.UnidadeAdministrativa;
-import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
-import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
-import br.edu.ufape.sgi.exceptions.ExceptionUtil;
-import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
-import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.*;
-import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
-import br.edu.ufape.sgi.models.*;
-import br.edu.ufape.sgi.servicos.interfaces.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +14,40 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import br.edu.ufape.sgi.comunicacao.dto.auth.TokenResponse;
+import br.edu.ufape.sgi.exceptions.CursoDuplicadoException;
+import br.edu.ufape.sgi.exceptions.ExceptionUtil;
+import br.edu.ufape.sgi.exceptions.SolicitacaoDuplicadaException;
+import br.edu.ufape.sgi.exceptions.TipoUnidadeAdministrativaDuplicadoException;
+import br.edu.ufape.sgi.exceptions.accessDeniedException.GlobalAccessDeniedException;
+import br.edu.ufape.sgi.exceptions.auth.KeycloakAuthenticationException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.AlunoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.CursoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.ProfessorNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.TecnicoNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.UsuarioNotFoundException;
+import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sgi.models.Curso;
+import br.edu.ufape.sgi.models.Documento;
+import br.edu.ufape.sgi.models.Perfil;
+import br.edu.ufape.sgi.models.SolicitacaoPerfil;
+import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
+import br.edu.ufape.sgi.models.UnidadeAdministrativa;
+import br.edu.ufape.sgi.models.Usuario;
+import br.edu.ufape.sgi.servicos.interfaces.AlunoService;
+import br.edu.ufape.sgi.servicos.interfaces.ArmazenamentoService;
+import br.edu.ufape.sgi.servicos.interfaces.CursoService;
+import br.edu.ufape.sgi.servicos.interfaces.KeycloakServiceInterface;
+import br.edu.ufape.sgi.servicos.interfaces.PerfilService;
+import br.edu.ufape.sgi.servicos.interfaces.ProfessorService;
+import br.edu.ufape.sgi.servicos.interfaces.SolicitacaoPerfilService;
+import br.edu.ufape.sgi.servicos.interfaces.TecnicoService;
+import br.edu.ufape.sgi.servicos.interfaces.TipoUnidadeAdministrativaService;
+import br.edu.ufape.sgi.servicos.interfaces.UnidadeAdministrativaService;
+import br.edu.ufape.sgi.servicos.interfaces.UsuarioService;
+import lombok.RequiredArgsConstructor;
 
 @Component @RequiredArgsConstructor
 
@@ -42,6 +63,7 @@ public class Fachada {
     private final PerfilService perfilService;
     private final ProfessorService professorService;
     private final TecnicoService tecnicoService;
+    private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -253,5 +275,22 @@ public class Fachada {
     public void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         unidadeAdministrativaService.deletarUnidadeAdministrativa(id);
     }
+    // ==================Tipo Unidade Administrativa ================== //
+     public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {
+        return tipoUnidadeAdministrativaService.salvar(tipoUnidadeAdministrativa);
+    }
 
+    public TipoUnidadeAdministrativa buscarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
+        return tipoUnidadeAdministrativaService.buscar(id);
+    }
+    public List<TipoUnidadeAdministrativa> listarTipos() {
+        return tipoUnidadeAdministrativaService.listar();
+    }
+    public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException, TipoUnidadeAdministrativaDuplicadoException {
+        return tipoUnidadeAdministrativaService.editar(id, novoTipo);
+    }
+
+    public void deletarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
+        tipoUnidadeAdministrativaService.deletar(id);
+    }
 }
