@@ -3,14 +3,12 @@ package br.edu.ufape.sgi.comunicacao.controllers;
 //import br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaPatchRequest;
 import java.util.List;
 
+import br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaRequest;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaResponse;
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
@@ -24,12 +22,13 @@ public class UnidadeAdministrativaController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
  //codigo quebrada 
-/*@PostMapping(value = "/registrar", consumes = "application/json", produces = "application/json")
-public ResponseEntity<UnidadeAdministrativaResponse> salvar(@Valid @RequestBody UnidadeAdministrativaRequest unidadeAdministrativaRequest) throws UnidadeAdministrativaNotFoundException {
-    UnidadeAdministrativa unidade = unidadeAdministrativaRequest.convertToEntity(unidadeAdministrativaRequest, modelMapper);
-    UnidadeAdministrativa response = fachada.salvar(unidade, unidadeAdministrativaRequest.getUnidadePaiId());
-    return new ResponseEntity<>(new UnidadeAdministrativaResponse(response, modelMapper), HttpStatus.CREATED);
-    }*/
+    @PostMapping(value = "/registrar", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UnidadeAdministrativaResponse> salvar(@Valid @RequestBody UnidadeAdministrativaRequest unidadeAdministrativaRequest) throws UnidadeAdministrativaNotFoundException {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRequest.convertToEntity(unidadeAdministrativaRequest, modelMapper);
+        Long unidadePai = unidadeAdministrativaRequest.getUnidadePaiId();
+        UnidadeAdministrativa response = fachada.salvar(unidade, unidadePai);
+        return new ResponseEntity<>(new UnidadeAdministrativaResponse(response, modelMapper), HttpStatus.CREATED);
+    }
 
 
     @GetMapping(value = "/{id}", produces = "application/json")

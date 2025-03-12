@@ -1,7 +1,6 @@
 package br.edu.ufape.sgi.servicos;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -19,14 +18,14 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sgi.servicos.i
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
     private final TipoUnidadeAdministrativaRepository tipoUnidadeAdministrativaRepository;
 
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Optional<Long> paiId) throws UnidadeAdministrativaNotFoundException {
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long paiId) throws UnidadeAdministrativaNotFoundException {
         TipoUnidadeAdministrativa tipoUnidadeAdministrativa = tipoUnidadeAdministrativaRepository
             .findById(unidadeAdministrativa.getTipoUnidadeAdministrativa().getId())
             .orElseThrow(UnidadeAdministrativaNotFoundException::new);
         unidadeAdministrativa.setTipoUnidadeAdministrativa(tipoUnidadeAdministrativa);
     
         if (paiId != null) {
-            UnidadeAdministrativa parent = unidadeAdministrativaRepository.findById(unidadeAdministrativa.getUnidadePai().getId())
+            UnidadeAdministrativa parent = unidadeAdministrativaRepository.findById(paiId)
                 .orElseThrow(UnidadeAdministrativaNotFoundException::new);
             unidadeAdministrativa.setUnidadePai(parent);
         }

@@ -1,14 +1,13 @@
 package br.edu.ufape.sgi.servicos.interfaces;
 
 import java.util.List;
-import java.util.Optional;
 
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
 
 public interface UnidadeAdministrativaService {
 
-    UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Optional<Long> paiId) throws UnidadeAdministrativaNotFoundException ;
+    UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long paiId) throws UnidadeAdministrativaNotFoundException ;
 
     UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException;
 

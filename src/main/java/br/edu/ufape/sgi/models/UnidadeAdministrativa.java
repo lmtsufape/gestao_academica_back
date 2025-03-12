@@ -37,19 +37,20 @@ public class UnidadeAdministrativa {
     @Column(unique = true, nullable = false)
     private String codigo;
 
-    @JsonIgnore
-    @JsonManagedReference
-    @ManyToOne(optional=false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tipo_unidade_administrativa_id", nullable = false)
+    @JsonManagedReference
     private TipoUnidadeAdministrativa tipoUnidadeAdministrativa;
 
-    //Adicionar relacionamento para representar a nossa arvore 
-    @ManyToOne(optional = true)
+    // Relacionamento da hierarquia (Árvore)
+    @ManyToOne
     @JoinColumn(name = "unidade_pai_id")
     @JsonBackReference
     private UnidadeAdministrativa unidadePai;
 
-    @OneToMany(mappedBy = "unidadePai", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "unidadePai", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     private List<UnidadeAdministrativa> unidadesFilhas = new ArrayList<>();
+
 }
+
