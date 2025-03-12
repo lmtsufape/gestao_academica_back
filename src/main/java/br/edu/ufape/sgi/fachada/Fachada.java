@@ -261,8 +261,8 @@ public class Fachada {
 
 
     // ================== Unidade Administrativa ================== //
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa) {
-        return unidadeAdministrativaService.salvar(unidadeAdministrativa);
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long tipoId) throws UnidadeAdministrativaNotFoundException {
+        return unidadeAdministrativaService.salvar(unidadeAdministrativa, tipoId);
     }
 
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
@@ -284,7 +284,8 @@ public class Fachada {
         return tipoUnidadeAdministrativaService.buscar(id);
     }
     public List<TipoUnidadeAdministrativa> listarTipos() {
-        return tipoUnidadeAdministrativaService.listar();
+       return tipoUnidadeAdministrativaService.listar();
+       
     }
     public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException, TipoUnidadeAdministrativaDuplicadoException {
         return tipoUnidadeAdministrativaService.editar(id, novoTipo);

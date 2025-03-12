@@ -1,8 +1,10 @@
 package br.edu.ufape.sgi.servicos;
 
+import br.edu.ufape.sgi.dados.TipoUnidadeAdministrativaRepository;
 import br.edu.ufape.sgi.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sgi.exceptions.ExceptionUtil;
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,15 +17,15 @@ import java.util.List;
 
 public class UnidadeAdministrativaService implements br.edu.ufape.sgi.servicos.interfaces.UnidadeAdministrativaService {
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
+    private final TipoUnidadeAdministrativaRepository tipoUnidadeAdministrativaRepository;
 
     @Override
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa) {
-        try {
-            return unidadeAdministrativaRepository.save(unidadeAdministrativa);
-        }catch (DataIntegrityViolationException e){
-            ExceptionUtil.handleDataIntegrityViolationException(e);
-            return null;
-        }
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa,Long tipoId) throws UnidadeAdministrativaNotFoundException {
+        TipoUnidadeAdministrativa tipoUnidadeAdministrativa = tipoUnidadeAdministrativaRepository
+        .findById(tipoId)
+        .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+        unidadeAdministrativa.setTipoUnidadeAdministrativa(tipoUnidadeAdministrativa);
+        return unidadeAdministrativaRepository.save(unidadeAdministrativa);
     }
 
     @Override

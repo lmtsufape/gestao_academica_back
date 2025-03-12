@@ -14,6 +14,8 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UnidadeAdministrativaRequest {
+    private Long tipoId;
+
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
@@ -25,5 +27,9 @@ public class UnidadeAdministrativaRequest {
 
     public UnidadeAdministrativa convertToEntity(UnidadeAdministrativaRequest unidadeAdministrativaRequest, ModelMapper modelMapper) {
         return modelMapper.map(unidadeAdministrativaRequest, UnidadeAdministrativa.class);
+    }
+
+    public Long getTipoId() {
+        return tipoId;
     }
 }

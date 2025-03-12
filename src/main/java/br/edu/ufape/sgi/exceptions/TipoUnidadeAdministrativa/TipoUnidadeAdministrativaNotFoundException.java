@@ -7,4 +7,8 @@ public class TipoUnidadeAdministrativaNotFoundException extends RuntimeException
     public TipoUnidadeAdministrativaNotFoundException() {
         super("Tipo de Unidade Administrativa não encontrado");
     }
+    public TipoUnidadeAdministrativaNotFoundException(String message) {
+        super(message);
+    }
+   
 }

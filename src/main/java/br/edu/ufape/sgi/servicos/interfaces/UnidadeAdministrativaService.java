@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UnidadeAdministrativaService {
 
-    UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa);
+    UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long tipoId)throws UnidadeAdministrativaNotFoundException ;
 
     UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException;
 
