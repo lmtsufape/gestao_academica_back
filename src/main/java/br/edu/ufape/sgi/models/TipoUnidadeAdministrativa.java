@@ -29,9 +29,7 @@ public class TipoUnidadeAdministrativa {
     @JsonManagedReference
     private List<UnidadeAdministrativa> unidadeAdministrativa= new ArrayList<>();
 
-    public String getNome() {
-        return nome;
-    }
+
 
     
 }

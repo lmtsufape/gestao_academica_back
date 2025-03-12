@@ -1,16 +1,16 @@
 package br.edu.ufape.sgi.servicos;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import br.edu.ufape.sgi.dados.TipoUnidadeAdministrativaRepository;
 import br.edu.ufape.sgi.dados.UnidadeAdministrativaRepository;
-import br.edu.ufape.sgi.exceptions.ExceptionUtil;
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +19,18 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sgi.servicos.i
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
     private final TipoUnidadeAdministrativaRepository tipoUnidadeAdministrativaRepository;
 
-    @Override
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa,Long tipoId) throws UnidadeAdministrativaNotFoundException {
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Optional<Long> paiId) throws UnidadeAdministrativaNotFoundException {
         TipoUnidadeAdministrativa tipoUnidadeAdministrativa = tipoUnidadeAdministrativaRepository
-        .findById(tipoId)
-        .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+            .findById(unidadeAdministrativa.getTipoUnidadeAdministrativa().getId())
+            .orElseThrow(UnidadeAdministrativaNotFoundException::new);
         unidadeAdministrativa.setTipoUnidadeAdministrativa(tipoUnidadeAdministrativa);
+    
+        if (paiId != null) {
+            UnidadeAdministrativa parent = unidadeAdministrativaRepository.findById(unidadeAdministrativa.getUnidadePai().getId())
+                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+            unidadeAdministrativa.setUnidadePai(parent);
+        }
+    
         return unidadeAdministrativaRepository.save(unidadeAdministrativa);
     }
 

@@ -261,10 +261,12 @@ public class Fachada {
 
 
     // ================== Unidade Administrativa ================== //
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long tipoId) throws UnidadeAdministrativaNotFoundException {
-        return unidadeAdministrativaService.salvar(unidadeAdministrativa, tipoId);
-    }
-
+    
+    //codigo de salvar quebrado
+    /* 
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long paiId) throws UnidadeAdministrativaNotFoundException {
+        return unidadeAdministrativaService.salvar(unidadeAdministrativa, paiId);
+    }*/
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
     }

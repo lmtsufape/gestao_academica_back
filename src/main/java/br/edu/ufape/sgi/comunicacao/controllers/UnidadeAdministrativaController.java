@@ -1,31 +1,36 @@
 package br.edu.ufape.sgi.comunicacao.controllers;
 
 //import br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaPatchRequest;
-import br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaRequest;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.edu.ufape.sgi.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaResponse;
 import br.edu.ufape.sgi.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sgi.fachada.Fachada;
 import br.edu.ufape.sgi.models.UnidadeAdministrativa;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController @RequestMapping("/unidade-administrativa") @RequiredArgsConstructor
 
 public class UnidadeAdministrativaController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
-
-    @PostMapping(value = "/registrar", consumes = "application/json", produces = "application/json")
-public ResponseEntity<UnidadeAdministrativaResponse> salvar(@Valid @RequestBody UnidadeAdministrativaRequest unidadeAdministrativa) throws UnidadeAdministrativaNotFoundException {
-    UnidadeAdministrativa response = fachada.salvar(unidadeAdministrativa.convertToEntity(unidadeAdministrativa, modelMapper), unidadeAdministrativa.getTipoId());
+ //codigo quebrada 
+/*@PostMapping(value = "/registrar", consumes = "application/json", produces = "application/json")
+public ResponseEntity<UnidadeAdministrativaResponse> salvar(@Valid @RequestBody UnidadeAdministrativaRequest unidadeAdministrativaRequest) throws UnidadeAdministrativaNotFoundException {
+    UnidadeAdministrativa unidade = unidadeAdministrativaRequest.convertToEntity(unidadeAdministrativaRequest, modelMapper);
+    UnidadeAdministrativa response = fachada.salvar(unidade, unidadeAdministrativaRequest.getUnidadePaiId());
     return new ResponseEntity<>(new UnidadeAdministrativaResponse(response, modelMapper), HttpStatus.CREATED);
-}
+    }*/
+
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<UnidadeAdministrativaResponse> buscarUnidadeAdministrativa(@PathVariable Long id) throws UnidadeAdministrativaNotFoundException {
@@ -38,13 +43,13 @@ public ResponseEntity<UnidadeAdministrativaResponse> salvar(@Valid @RequestBody 
         return fachada.listarUnidadesAdministrativas().stream().map(unidadeAdministrativa -> new UnidadeAdministrativaResponse(unidadeAdministrativa, modelMapper)).toList();
     }
 
-   /* @PatchMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+   /*@PatchMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UnidadeAdministrativaResponse> atualizarUnidadeAdministrativa(@PathVariable Long id, @Valid @RequestBody UnidadeAdministrativaPatchRequest entity) throws UnidadeAdministrativaNotFoundException{
         UnidadeAdministrativa unidadeAdministrativa = fachada.buscarUnidadeAdministrativa(id);
         modelMapper.map(entity, unidadeAdministrativa);
         return new ResponseEntity<>(new UnidadeAdministrativaResponse(fachada.salvar(unidadeAdministrativa), modelMapper), HttpStatus.OK);
-    }*/
-
+        }
+*/
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Void> deletarUnidadeAdministrativa(@PathVariable Long id) throws UnidadeAdministrativaNotFoundException {
         fachada.deletarUnidadeAdministrativa(id);
