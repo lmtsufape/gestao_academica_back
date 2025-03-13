@@ -23,7 +23,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/sgu
     username: postgres
-    password: baryonmode
+    password: .als2020
   jpa:
     hibernate:
       ddl-auto: update
@@ -47,7 +47,7 @@ springdoc:
     path: /api-doc/swagger.html
 
 keycloak:
-    auth-server-url: http://localhost:8080/
+    auth-server-url: https://lmtsteste23.ufape.edu.br/
     realm: sgu-ufape
     client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
     client-id: sgu-application
@@ -67,14 +67,14 @@ spring:
   datasource:
     url: jdbc:postgresql://backend-db:5432/sgu
     username: postgres
-    password: baryonmode
+    password: .als2020
   security:
     oauth2:
       resourceserver:
         jwt:
           jwk-set-uri: ${keycloak.auth-server-url}realms/${keycloak.realm}/protocol/openid-connect/certs
 keycloak:
-  auth-server-url: http://keycloak:8080/
+  auth-server-url: https://lmtsteste23.ufape.edu.br/
   realm: sgu-ufape
   client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
   client-id: sgu-application
