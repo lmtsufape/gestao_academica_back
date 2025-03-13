@@ -14,4 +14,8 @@ public interface UnidadeAdministrativaService {
     List<UnidadeAdministrativa> listarUnidadesAdministrativas();
 
     void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException;
+
+        
+    UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
+
 }

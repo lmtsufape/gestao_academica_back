@@ -276,6 +276,12 @@ public class Fachada {
     public void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         unidadeAdministrativaService.deletarUnidadeAdministrativa(id);
     }
+
+    public UnidadeAdministrativa editarUnidadeAdministrativa(Long id, UnidadeAdministrativa novaUnidadeAdministrativa) throws UnidadeAdministrativaNotFoundException {
+        return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
+    }
+    
+
     // ==================Tipo Unidade Administrativa ================== //
      public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {
         return tipoUnidadeAdministrativaService.salvar(tipoUnidadeAdministrativa);
