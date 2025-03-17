@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.edu.ufape</groupId>
-	<artifactId>sgi-back</artifactId>
+	<artifactId>sgu-auth-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sgi</name>
+	<name>sgu</name>
 	<description>Sistema de gestão interno do LMTS</description>
 	<url/>
 	<licenses>

@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: sgu-back
+    name: sgu-auth-service
   web:
     locale-resolver: fixed
     locale: pt_BR
