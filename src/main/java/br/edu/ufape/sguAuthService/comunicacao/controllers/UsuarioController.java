@@ -29,7 +29,7 @@ public class UsuarioController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity<UsuarioResponse> salvar(@Valid @RequestBody UsuarioRequest usuario) {
         Usuario response = fachada.salvarUsuario(usuario.convertToEntity(usuario, modelMapper), usuario.getSenha());
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.CREATED);
@@ -57,7 +57,7 @@ public class UsuarioController {
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
-    @PatchMapping("/editar")
+    @PatchMapping
     public ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
@@ -65,7 +65,7 @@ public class UsuarioController {
         return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(principal.getSubject(), novoUsuario), modelMapper), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deletar")
+    @DeleteMapping
     public ResponseEntity<Void> deletar() throws UsuarioNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
