@@ -1,18 +1,25 @@
-# Use uma imagem base do OpenJDK 22
+# Estágio de construção (build)
 FROM openjdk:22-jdk-slim AS build
 
-# Instale Maven
+# Instale o Maven
 RUN apt-get update && apt-get install -y maven
+
 # Define o diretório de trabalho no contêiner
 WORKDIR /app
 
+# Copie apenas o pom.xml primeiro para aproveitar o cache de dependências
+COPY pom.xml .
 
-COPY . .
+# Baixe as dependências (isso será armazenado em cache)
+RUN mvn dependency:go-offline -B
+
+# Copie o restante do código fonte
+COPY src ./src
 
 # Execute o comando mvn clean install
 RUN mvn clean install -DskipTests
 
-# Use uma imagem OpenJDK como base para a imagem final
+# Estágio final (imagem leve)
 FROM openjdk:22-jdk-slim
 
 # Define o diretório de trabalho no contêiner
