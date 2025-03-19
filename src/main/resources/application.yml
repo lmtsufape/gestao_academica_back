@@ -23,7 +23,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/sgu
     username: postgres
-    password: baryonmode
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
@@ -47,7 +47,7 @@ springdoc:
     path: /api-doc/swagger.html
 
 keycloak:
-    auth-server-url: http://localhost:8080/
+    auth-server-url: http://localhost:9090/
     realm: sgu-ufape
     client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
     client-id: sgu-application
@@ -67,7 +67,7 @@ spring:
   datasource:
     url: jdbc:postgresql://backend-db:5432/sgu
     username: postgres
-    password: baryonmode
+    password: password
   security:
     oauth2:
       resourceserver:
@@ -78,3 +78,14 @@ keycloak:
   realm: sgu-ufape
   client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
   client-id: sgu-application
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+    registerWithEureka: true
+    fetchRegistry: true
+  instance:
+    hostname: sgu-auth-service
+    prefer-ip-address: false
