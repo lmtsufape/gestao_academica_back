@@ -5,7 +5,7 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
-import br.edu.ufape.sguAuthService.models.Enums.TipoPerfil;
+import br.edu.ufape.sguAuthService.models.Aluno;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class AlunoService implements br.edu.ufape.sguAuthService.servicos.interf
         if(!isAdm && !usuario.getKcId().equals(sessionId)) {
             throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
-        if(usuario.getPerfis().stream().noneMatch(perfil -> perfil.getTipo().equals(TipoPerfil.ALUNO))) {
+        if (usuario.getPerfis().stream().noneMatch(perfil -> perfil instanceof Aluno)) {
             throw new AlunoNotFoundException();
         }
         return usuario;

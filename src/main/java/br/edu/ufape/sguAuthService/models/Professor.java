@@ -1,6 +1,5 @@
 package br.edu.ufape.sguAuthService.models;
 
-import br.edu.ufape.sguAuthService.models.Enums.TipoPerfil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
@@ -18,10 +17,7 @@ public class Professor extends Funcionario {
     @ManyToMany
     private Set<Curso> cursos = new HashSet<>();
 
-    @Override
-    public TipoPerfil getTipo() {
-        return TipoPerfil.PROFESSOR;
-    }
+
 
 
 }

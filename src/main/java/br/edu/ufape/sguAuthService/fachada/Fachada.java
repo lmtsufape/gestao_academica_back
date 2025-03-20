@@ -220,7 +220,7 @@ public class Fachada {
         Usuario usuario = buscarUsuarioPorKcId(sessionId);
         parecer.setResponsavel(usuario);
         SolicitacaoPerfil solicitacaoPerfil =  solicitacaoPerfilService.aceitarSolicitacao(id, parecer);
-        String tipoPerfil = solicitacaoPerfil.getPerfil().getTipo().name().toLowerCase();
+        String tipoPerfil = solicitacaoPerfil.getPerfil().getClass().getSimpleName().toLowerCase();
         keycloakService.addRoleToUser(solicitacaoPerfil.getSolicitante().getKcId(), tipoPerfil);
         return solicitacaoPerfil;
     }

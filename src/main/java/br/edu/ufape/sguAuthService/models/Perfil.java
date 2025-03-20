@@ -1,6 +1,5 @@
 package br.edu.ufape.sguAuthService.models;
 
-import br.edu.ufape.sguAuthService.models.Enums.TipoPerfil;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,6 @@ public abstract class Perfil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public abstract TipoPerfil getTipo();
 
     // Foto de perfil armazenada em binário
     @Lob
