@@ -32,11 +32,12 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
         solicitacaoPerfil.setDocumentos(documentos);
         solicitacaoPerfil.setStatus(StatusSolicitacao.PENDENTE);
         solicitacaoPerfil.setDataSolicitacao(LocalDateTime.now());
+        solicitacaoPerfil.setPerfilSolicitado(perfil.getClass().getSimpleName());
         List<SolicitacaoPerfil> solicitacoes = solicitacaoPerfilRepository.findBySolicitanteAndStatusIn(
                 solicitacaoPerfil.getSolicitante(),
                 List.of(StatusSolicitacao.PENDENTE, StatusSolicitacao.APROVADA));
         for (SolicitacaoPerfil solicitacao : solicitacoes) {
-            if (solicitacao.getPerfil().getTipo().equals(solicitacaoPerfil.getPerfil().getTipo())) {
+            if (solicitacao.getPerfil().getClass().equals(perfil.getClass())) {
                 throw new SolicitacaoDuplicadaException();
             }
         }

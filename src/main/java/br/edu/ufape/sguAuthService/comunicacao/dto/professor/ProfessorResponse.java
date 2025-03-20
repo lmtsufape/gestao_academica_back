@@ -17,7 +17,7 @@ public class ProfessorResponse extends UsuarioResponse {
     Set<CursoResponse> cursos;
 
     public ProfessorResponse(Usuario usuario, ModelMapper modelMapper){
-        if (usuario == null) throw new IllegalArgumentException("Aluno não pode ser nulo");
+        if (usuario == null) throw new IllegalArgumentException("Professor não pode ser nulo");
         else modelMapper.map(usuario, this);
         this.siape = usuario.getProfessor().getSiape();
         this.cursos = usuario.getProfessor().getCursos().stream().map(curso -> new CursoResponse(curso, modelMapper)).collect(Collectors.toSet());

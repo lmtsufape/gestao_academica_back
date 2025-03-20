@@ -42,6 +42,7 @@ public class Fachada {
     private final PerfilService perfilService;
     private final ProfessorService professorService;
     private final TecnicoService tecnicoService;
+    private final GestorService gestorService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -93,6 +94,16 @@ public class Fachada {
     public Usuario buscarTecnico(Long id, String sessionId) throws UsuarioNotFoundException, TecnicoNotFoundException {
         boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
         return tecnicoService.buscarTecnico(id, isAdmin, sessionId);
+    }
+
+    // ================== Gestor ================== //
+    public List<Usuario> listarGestores() {
+        return gestorService.listarGestores();
+    }
+
+    public Usuario buscarGestor(Long id, String sessionId) throws GestorNotFoundException, UsuarioNotFoundException {
+        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
+        return gestorService.buscarGestor(id, isAdmin, sessionId);
     }
 
 
@@ -220,7 +231,7 @@ public class Fachada {
         Usuario usuario = buscarUsuarioPorKcId(sessionId);
         parecer.setResponsavel(usuario);
         SolicitacaoPerfil solicitacaoPerfil =  solicitacaoPerfilService.aceitarSolicitacao(id, parecer);
-        String tipoPerfil = solicitacaoPerfil.getPerfil().getTipo().name().toLowerCase();
+        String tipoPerfil = solicitacaoPerfil.getPerfil().getClass().getSimpleName().toLowerCase();
         keycloakService.addRoleToUser(solicitacaoPerfil.getSolicitante().getKcId(), tipoPerfil);
         return solicitacaoPerfil;
     }

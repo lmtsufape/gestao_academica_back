@@ -25,14 +25,14 @@ public class CursoController {
 
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity<CursoResponse> salvar(@Valid @RequestBody CursoRequest curso) throws CursoDuplicadoException {
         Curso response = fachada.salvarCurso(curso.convertToEntity(curso, modelMapper));
         return new ResponseEntity<>(new CursoResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @PatchMapping("/{id}/editar")
+    @PatchMapping("/{id}")
     public ResponseEntity<CursoResponse> editar(@PathVariable Long id, @Valid @RequestBody CursoRequest curso) throws CursoNotFoundException, CursoDuplicadoException {
         Curso response = fachada.editarCurso(id, curso.convertToEntity(curso, modelMapper));
         return new ResponseEntity<>(new CursoResponse(response, modelMapper), HttpStatus.OK);
@@ -50,7 +50,7 @@ public class CursoController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @DeleteMapping("/{id}/deletar")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) throws CursoNotFoundException {
         fachada.deletarCurso(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

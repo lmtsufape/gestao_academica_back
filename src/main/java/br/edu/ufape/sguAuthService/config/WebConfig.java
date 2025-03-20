@@ -3,6 +3,7 @@ package br.edu.ufape.sguAuthService.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,14 +32,14 @@ public class WebConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless session management
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/usuario/registrar").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/usuario").permitAll()
                         .requestMatchers("/security/**").permitAll()
                         .requestMatchers("/api-doc/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/auth/refresh").permitAll()
-                        .requestMatchers("/auth/logout").permitAll()
-                        .requestMatchers("/auth/reset-password").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/refresh").permitAll()
+                        .requestMatchers("/logout").permitAll()
+                        .requestMatchers("/reset-password").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeycloakJwtAuthenticationConverter())))
                 .cors(Customizer.withDefaults());

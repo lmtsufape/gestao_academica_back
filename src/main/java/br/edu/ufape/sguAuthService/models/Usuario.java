@@ -72,4 +72,8 @@ public class Usuario {
     public Tecnico getTecnico() {
         return perfis.stream().filter(perfil -> perfil instanceof Tecnico).map(perfil -> (Tecnico) perfil).findFirst().orElseThrow();
     }
+
+    public Gestor getGestor() {
+        return perfis.stream().filter(perfil -> perfil instanceof Gestor).map(perfil -> (Gestor) perfil).findFirst().orElseThrow();
+    }
 }

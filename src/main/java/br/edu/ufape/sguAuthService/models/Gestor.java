@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter @Setter
 @Entity
-public class Tecnico extends Funcionario {
-
+public class Gestor extends Funcionario {
 
 }

@@ -28,6 +28,8 @@ public class SolicitacaoPerfilResponse {
 
     private String parecer;
 
+    private String perfilSolicitado;
+
     private Perfil perfil;
 
     private UsuarioResponse solicitante;

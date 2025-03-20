@@ -4,7 +4,7 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.ProfessorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
-import br.edu.ufape.sguAuthService.models.Enums.TipoPerfil;
+import br.edu.ufape.sguAuthService.models.Professor;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class ProfessorService implements br.edu.ufape.sguAuthService.servicos.in
         if(!isAdm && !usuario.getKcId().equals(sessionId)) {
             throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
-        if(usuario.getPerfis().stream().noneMatch(perfil -> perfil.getTipo().equals(TipoPerfil.PROFESSOR))) {
+        if (usuario.getPerfis().stream().noneMatch(perfil -> perfil instanceof Professor)) {
             throw new ProfessorNotFoundException();
         }
         return usuario;
