@@ -29,6 +29,8 @@ public class SolicitacaoPerfil {
 
     private LocalDateTime dataAvaliacao;
 
+    private String perfilSolicitado;
+
     private String parecer;
 
     @OneToOne
