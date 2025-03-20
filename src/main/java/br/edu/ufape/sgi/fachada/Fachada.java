@@ -273,6 +273,14 @@ public class Fachada {
         return unidadeAdministrativaService.listarUnidadesAdministrativas();
     }
 
+    public List<UnidadeAdministrativa> montarArvore() {
+        return unidadeAdministrativaService.montarArvore();
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesFilhas(Long id) {
+        return unidadeAdministrativaService.listarUnidadesFilhas(id);
+    }
+
     public void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         unidadeAdministrativaService.deletarUnidadeAdministrativa(id);
     }
@@ -280,6 +288,10 @@ public class Fachada {
     public UnidadeAdministrativa editarUnidadeAdministrativa(Long id, UnidadeAdministrativa novaUnidadeAdministrativa) throws UnidadeAdministrativaNotFoundException {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
+
+//    public void adicionarGestor(Long unidadeId, Long usuarioId) {
+//        return unidadeAdministrativaService.adicionarGestor(unidadeId, usuarioid);
+//    }
     
 
     // ==================Tipo Unidade Administrativa ================== //

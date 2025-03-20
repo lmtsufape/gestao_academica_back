@@ -42,7 +42,6 @@ public class UnidadeAdministrativa {
     @JsonManagedReference
     private TipoUnidadeAdministrativa tipoUnidadeAdministrativa;
 
-    // Relacionamento da hierarquia (Árvore)
     @ManyToOne
     @JoinColumn(name = "unidade_pai_id")
     @JsonBackReference
@@ -51,6 +50,5 @@ public class UnidadeAdministrativa {
     @OneToMany(mappedBy = "unidadePai", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     private List<UnidadeAdministrativa> unidadesFilhas = new ArrayList<>();
-
 }
 

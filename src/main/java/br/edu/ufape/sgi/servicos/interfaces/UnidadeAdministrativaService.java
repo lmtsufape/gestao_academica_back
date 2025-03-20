@@ -13,9 +13,13 @@ public interface UnidadeAdministrativaService {
 
     List<UnidadeAdministrativa> listarUnidadesAdministrativas();
 
+    List<UnidadeAdministrativa> montarArvore();
+
+    List<UnidadeAdministrativa> listarUnidadesFilhas(Long id);
+
     void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException;
 
-        
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
+//    void adicionarGestor(Long unidadeId, Long usuarioId);
 }
