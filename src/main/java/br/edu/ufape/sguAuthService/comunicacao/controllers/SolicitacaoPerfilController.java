@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.aluno.AlunoRequest;
+import br.edu.ufape.sguAuthService.comunicacao.dto.gestor.GestorRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.professor.ProfessorRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilRequest;
@@ -56,6 +57,13 @@ public class SolicitacaoPerfilController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(tecnicoRequest.convertToEntity(modelMapper), principal.getSubject(), tecnicoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/gestor", consumes = "multipart/form-data")
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilGestor(@ModelAttribute GestorRequest gestorRequest) throws  UsuarioNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(gestorRequest.convertToEntity(modelMapper), principal.getSubject(), gestorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")

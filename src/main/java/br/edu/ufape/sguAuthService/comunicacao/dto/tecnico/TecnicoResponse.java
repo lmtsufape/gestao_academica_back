@@ -13,7 +13,7 @@ public class TecnicoResponse extends UsuarioResponse {
     String siape;
 
     public TecnicoResponse(Usuario usuario, ModelMapper modelMapper){
-        if (usuario == null) throw new IllegalArgumentException("Aluno não pode ser nulo");
+        if (usuario == null) throw new IllegalArgumentException("Tecnico não pode ser nulo");
         else modelMapper.map(usuario, this);
         this.siape = usuario.getTecnico().getSiape();
     }
