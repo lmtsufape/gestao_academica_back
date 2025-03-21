@@ -20,10 +20,22 @@ public class UnidadeAdministrativaRequest {
     @NotBlank(message = "O código é obrigatório")
     private String codigo;
 
-    @NotNull
-    private TipoUnidadeAdministrativa tipoUnidade;
+    @NotNull(message = "O tipo de unidade administrativa é obrigatório")
+    private Long tipoUnidadeAdministrativaId;
 
-    public UnidadeAdministrativa convertToEntity(UnidadeAdministrativaRequest unidadeAdministrativaRequest, ModelMapper modelMapper) {
+    private Long unidadePaiId; //esse atributo é para definir a unidade pai da unidade que está sendo criada
+
+
+    public UnidadeAdministrativa convertToEntity(
+            UnidadeAdministrativaRequest unidadeAdministrativaRequest,
+            ModelMapper modelMapper) {
+
+        modelMapper.typeMap(UnidadeAdministrativaRequest.class, UnidadeAdministrativa.class)
+                .addMappings(mapper -> {
+                    mapper.skip(UnidadeAdministrativa::setUnidadePai); // Ignora unidadePai
+                    mapper.skip(UnidadeAdministrativa::setId); // Garante que unidadePaiId não seja mapeado para id
+                });
+
         return modelMapper.map(unidadeAdministrativaRequest, UnidadeAdministrativa.class);
     }
 }
