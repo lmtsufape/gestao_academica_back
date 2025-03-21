@@ -1,4 +1,4 @@
-package br.edu.ufape.sgi.exceptions;
+package br.edu.ufape.sguAuthService.exceptions;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;

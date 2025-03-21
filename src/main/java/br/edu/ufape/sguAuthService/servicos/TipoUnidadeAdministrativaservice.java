@@ -1,19 +1,19 @@
-package br.edu.ufape.sgi.servicos;
+package br.edu.ufape.sguAuthService.servicos;
 
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufape.sgi.dados.TipoUnidadeAdministrativaRepository;
-import br.edu.ufape.sgi.exceptions.TipoUnidadeAdministrativaDuplicadoException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.dados.TipoUnidadeAdministrativaRepository;
+import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sgi.servicos.interfaces.TipoUnidadeAdministrativaService {
+public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sguAuthService.servicos.interfaces.TipoUnidadeAdministrativaService {
     private final TipoUnidadeAdministrativaRepository tipoUnidadeAdministrativaRepository;
     private final ModelMapper modelMapper;
 

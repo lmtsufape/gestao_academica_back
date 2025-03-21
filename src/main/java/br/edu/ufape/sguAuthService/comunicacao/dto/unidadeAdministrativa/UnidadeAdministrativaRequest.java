@@ -2,7 +2,6 @@ package br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa;
 
 
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.Enums.TipoUnidadeAdministrativa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

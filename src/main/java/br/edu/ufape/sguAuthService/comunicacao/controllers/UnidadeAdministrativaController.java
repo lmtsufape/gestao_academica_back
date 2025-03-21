@@ -1,15 +1,21 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
-import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaPatchRequest;
-import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaRequest;
-import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaResponse;
+import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.*;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestController @RequestMapping("/unidade-administrativa") @RequiredArgsConstructor
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/unidade-administrativa") @RequiredArgsConstructor
 
 public class UnidadeAdministrativaController {
     private final Fachada fachada;

@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.fachada;
 
 
+import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 import br.edu.ufape.sguAuthService.comunicacao.dto.auth.TokenResponse;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +27,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Component @RequiredArgsConstructor
 
@@ -253,8 +251,8 @@ public class Fachada {
 
 
     // ================== Unidade Administrativa ================== //
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa) {
-        return unidadeAdministrativaService.salvar(unidadeAdministrativa);
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long paiId) throws UnidadeAdministrativaNotFoundException {
+        return unidadeAdministrativaService.salvar(unidadeAdministrativa, paiId);
     }
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
@@ -278,10 +276,6 @@ public class Fachada {
     public UnidadeAdministrativa editarUnidadeAdministrativa(Long id, UnidadeAdministrativa novaUnidadeAdministrativa) throws UnidadeAdministrativaNotFoundException {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
-
-//    public void adicionarGestor(Long unidadeId, Long usuarioId) {
-//        return unidadeAdministrativaService.adicionarGestor(unidadeId, usuarioid);
-//    }
 
 
     // ==================Tipo Unidade Administrativa ================== //

@@ -1,7 +1,7 @@
-package br.edu.ufape.sgi.comunicacao.dto.TipoUnidadeAdministrativa;
+package br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 import org.modelmapper.ModelMapper;
 
-import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

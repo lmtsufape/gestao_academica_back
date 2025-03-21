@@ -1,6 +1,5 @@
 package br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa;
 
-import br.edu.ufape.sguAuthService.models.Enums.TipoUnidadeAdministrativa;
 import org.modelmapper.ModelMapper;
 
 import lombok.AllArgsConstructor;

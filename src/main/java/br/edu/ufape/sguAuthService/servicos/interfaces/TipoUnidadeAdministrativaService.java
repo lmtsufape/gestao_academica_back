@@ -1,10 +1,10 @@
-package br.edu.ufape.sgi.servicos.interfaces;
+package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import java.util.List;
 
-import br.edu.ufape.sgi.exceptions.TipoUnidadeAdministrativaDuplicadoException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 
 public interface TipoUnidadeAdministrativaService {
 

@@ -1,12 +1,12 @@
-package br.edu.ufape.sgi.comunicacao.dto.TipoUnidadeAdministrativa;
+package br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa;
 
 
 
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 import lombok.Getter;
 import lombok.Setter;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor

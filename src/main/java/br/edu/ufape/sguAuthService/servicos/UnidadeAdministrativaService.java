@@ -1,10 +1,19 @@
 package br.edu.ufape.sguAuthService.servicos;
 
+import br.edu.ufape.sguAuthService.dados.TipoUnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
-import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
+import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
+import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaDuplicadaException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +29,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
             throw new UnidadeAdministrativaDuplicadaException("Código da unidade administrativa já está em uso.");
         }
 
-        if (paiId != null && unidadeAdministrativa.getId() != null && unidadeAdministrativa.getId().equals(paiId)) {
+        if (unidadeAdministrativa.getId() != null && unidadeAdministrativa.getId().equals(paiId)) {
             throw new UnidadeAdministrativaCircularException();
         }
 

@@ -1,8 +1,10 @@
-package br.edu.ufape.sgi.comunicacao.controllers;
+package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.edu.ufape.sguAuthService.fachada.Fachada;
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ufape.sgi.comunicacao.dto.TipoUnidadeAdministrativa.TipoUnidadeAdministrativaRequest;
-import br.edu.ufape.sgi.comunicacao.dto.TipoUnidadeAdministrativa.TipoUnidadeAdministrativaResponse;
-import br.edu.ufape.sgi.exceptions.TipoUnidadeAdministrativaDuplicadoException;
-import br.edu.ufape.sgi.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sgi.fachada.Fachada;
-import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaRequest;
+import br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaResponse;
+import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -60,12 +61,6 @@ public class TipoUnidadeAdministrativaController {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    /*@GetMapping
-    public List<TipoUnidadeAdministrativaResponse> listar() {
-        return fachada.listarTipos().stream()
-        .map(tipoUnidadeAdministrativa -> new TipoUnidadeAdministrativaResponse(tipoUnidadeAdministrativa, modelMapper))
-        .toList();
-    }*/
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}/deletar")
