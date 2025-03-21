@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.fachada;
 
 
+import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 import br.edu.ufape.sguAuthService.comunicacao.dto.auth.TokenResponse;
@@ -12,6 +13,9 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.*;
 import br.edu.ufape.sguAuthService.exceptions.auth.KeycloakAuthenticationException;
 import br.edu.ufape.sguAuthService.models.*;
 import br.edu.ufape.sguAuthService.servicos.interfaces.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -23,10 +27,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Component @RequiredArgsConstructor
 
@@ -43,6 +43,7 @@ public class Fachada {
     private final ProfessorService professorService;
     private final TecnicoService tecnicoService;
     private final GestorService gestorService;
+    private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -250,10 +251,9 @@ public class Fachada {
 
 
     // ================== Unidade Administrativa ================== //
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa) {
-        return unidadeAdministrativaService.salvar(unidadeAdministrativa);
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long paiId) throws UnidadeAdministrativaNotFoundException {
+        return unidadeAdministrativaService.salvar(unidadeAdministrativa, paiId);
     }
-
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
     }
@@ -261,8 +261,40 @@ public class Fachada {
         return unidadeAdministrativaService.listarUnidadesAdministrativas();
     }
 
+    public List<UnidadeAdministrativa> montarArvore() {
+        return unidadeAdministrativaService.montarArvore();
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesFilhas(Long id) {
+        return unidadeAdministrativaService.listarUnidadesFilhas(id);
+    }
+
     public void deletarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         unidadeAdministrativaService.deletarUnidadeAdministrativa(id);
     }
 
+    public UnidadeAdministrativa editarUnidadeAdministrativa(Long id, UnidadeAdministrativa novaUnidadeAdministrativa) throws UnidadeAdministrativaNotFoundException {
+        return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
+    }
+
+
+    // ==================Tipo Unidade Administrativa ================== //
+     public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {
+        return tipoUnidadeAdministrativaService.salvar(tipoUnidadeAdministrativa);
+    }
+
+    public TipoUnidadeAdministrativa buscarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
+        return tipoUnidadeAdministrativaService.buscar(id);
+    }
+    public List<TipoUnidadeAdministrativa> listarTipos() {
+       return tipoUnidadeAdministrativaService.listar();
+
+    }
+    public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException, TipoUnidadeAdministrativaDuplicadoException {
+        return tipoUnidadeAdministrativaService.editar(id, novoTipo);
+    }
+
+    public void deletarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
+        tipoUnidadeAdministrativaService.deletar(id);
+    }
 }

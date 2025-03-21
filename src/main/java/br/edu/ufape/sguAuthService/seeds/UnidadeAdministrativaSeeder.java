@@ -1,10 +1,10 @@
-package br.edu.ufape.sguAuthService.seeds;
+/*package br.edu.ufape.sgi.seeds;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.Enums.TipoUnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
+import br.edu.ufape.sgi.models.UnidadeAdministrativa;
+import br.edu.ufape.sgi.models.Enums.TipoUnidadeAdministrativa;
+import br.edu.ufape.sgi.dados.UnidadeAdministrativaRepository;
 
 @Component
 public class UnidadeAdministrativaSeeder implements CommandLineRunner {
@@ -15,7 +15,7 @@ public class UnidadeAdministrativaSeeder implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws Exception {
         if (unidadeAdministrativaRepository.count() == 0) {
             unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Administração", "PROAD", TipoUnidadeAdministrativa.PROREITORIA));
             unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Ensino e Graduação", "PREG", TipoUnidadeAdministrativa.PROREITORIA));
@@ -30,4 +30,4 @@ public class UnidadeAdministrativaSeeder implements CommandLineRunner {
             System.out.println("Seed já foi executado anteriormente.");
         }
     }
-}
+}*/
